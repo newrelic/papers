@@ -25,6 +25,14 @@ class DependencyLicenseValidator
     @manifest ||= YAML.load File.read(manifest_file)
   end
 
+  def pretty_gem_list
+    GemSpec.all_from_manifest(manifest).map(&:pretty_hash)
+  end
+
+  def pretty_js_list
+    JsSpec.all_from_manifest(manifest).map(&:pretty_hash)
+  end
+
   private
 
   def validate_spec_type(spec_type)
@@ -53,14 +61,38 @@ class DependencyLicenseValidator
     File.join Rails.root, "config", "dependency_manifest.yml"
   end
 
-  class DependencySpec < Struct.new(:name, :license)
+  class DependencySpec
+    attr_accessor :name, :license, :license_url, :project_url
+
+    def initialize(options)
+      @name = options[:name]
+      @license = options[:license]
+      @license_url = options[:license_url]
+      @project_url = options[:project_url]
+    end
+
     GOOD_LICENSES = ["MIT", "BSD", "LGPLv2.1", "LGPLv3", "Ruby", "Apache 2.0", "Perl Artistic", "Artistic 2.0", "ISC", "New Relic", "None", "Manually reviewed"]
     def acceptable_license?
       GOOD_LICENSES.include?(license)
     end
 
+    protected
+
+    def public_license_name
+      if license == 'Manually reviewed'
+        'Other'
+      else
+        license
+      end
+    end
+
     def self.all_from_manifest(manifest)
-      manifest[manifest_key].map {|name, license| new name, license}
+      manifest[manifest_key].map do |name, info|
+        license_url = info['license_url']
+        license = info['license']
+        project_url = info['project_url']
+        self.new(name: name, license: license, license_url: license_url, project_url: project_url)
+      end.sort { |a, b| a.name.downcase <=> b.name.downcase }
     end
 
     def self.missing_from_manifest(manifest)
@@ -73,6 +105,15 @@ class DependencyLicenseValidator
   end
 
   class GemSpec < DependencySpec
+    def pretty_hash
+      { name: name_without_version, license: public_license_name, license_url: @license_url, project_url: @project_url }
+    end
+
+    def name_without_version
+      return @name unless @name.include?('-')
+      @name.split('-')[0..-2].join('-')
+    end
+
     def self.introspected
       Bundler.load.specs.map do |spec|
         # bundler versions aren't controlled by the Gemfile
@@ -90,6 +131,10 @@ class DependencyLicenseValidator
   end
 
   class JsSpec < DependencySpec
+    def pretty_hash
+      { name: @name, license: public_license_name, license_url: @license_url, project_url: @project_url }
+    end
+
     def self.introspected
       dirs = []
       dirs << File.join(Rails.root, "app", "assets", "javascripts")
