@@ -87,7 +87,7 @@ class DependencyLicenseValidator
     end
 
     def self.all_from_manifest(manifest)
-      manifest[manifest_key].map do |name, info|
+      (manifest[manifest_key] || []).map do |name, info|
         license_url = info['license_url']
         license = info['license']
         project_url = info['project_url']

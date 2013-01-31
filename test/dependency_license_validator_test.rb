@@ -7,8 +7,24 @@ require 'shoulda'
 
 require 'papers'
 
+class Rails
+  def self.root; '' end
+end
+
 module Papers
 class DependencyLicenseValidatorTest < Test::Unit::TestCase
+  should "validate a manifest with empty values and set of dependencies" do
+    validator = DependencyLicenseValidator.new
+
+    validator.expects(:manifest).returns({
+      "javascripts" => nil,
+      "gems" => nil
+    }).at_least_once
+    DependencyLicenseValidator::GemSpec.expects(:introspected).returns([]).at_least_once
+
+    assert validator.valid?, "should be valid"
+  end
+
   should "detect mismatched gems" do
     validator = DependencyLicenseValidator.new
     validator.expects(:validate_js)
