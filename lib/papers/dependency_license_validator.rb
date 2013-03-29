@@ -70,7 +70,8 @@ class DependencyLicenseValidator
       @license_url = options[:license_url]
       @project_url = options[:project_url]
     end
-
+  
+    # Do not modify this without talking to Bjorn or Jade!
     GOOD_LICENSES = ["MIT", "BSD", "LGPLv2.1", "LGPLv3", "Ruby", "Apache 2.0", "Perl Artistic", "Artistic 2.0", "ISC", "New Relic", "None", "Manually reviewed"]
     def acceptable_license?
       GOOD_LICENSES.include?(license)
