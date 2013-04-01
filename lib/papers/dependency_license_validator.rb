@@ -139,7 +139,7 @@ class DependencyLicenseValidator
     def self.introspected
       dirs = []
       dirs << File.join(Rails.root, "app", "assets", "javascripts")
-
+      dirs << File.join(Rails.root, "public", "javascripts")
       root_regexp = /^#{Regexp.escape Rails.root.to_s}\//
       dirs.map {|dir| Dir["#{dir}/**/*.js"]}.flatten.map {|name| name.sub(root_regexp, '')}
     end
