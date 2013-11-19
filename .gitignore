@@ -1,1 +1,3 @@
-papers*.gem
+.DS_Store
+Guardfile
+*.swp
