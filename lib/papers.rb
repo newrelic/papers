@@ -1,2 +1,15 @@
-require File.join(File.dirname(__FILE__),"railtie") if defined?(Rails)
-require File.join(File.dirname(__FILE__),"papers/dependency_license_validator.rb")
+require 'papers/configuration'
+require 'papers/license_validator'
+require 'papers/dependency_specification'
+require 'papers/version'
+
+module Papers
+  def self.configure(&block)
+    yield configuration
+  end
+
+  def configuration
+    @config ||= configuration.new
+  end
+  alias config configuration
+end
