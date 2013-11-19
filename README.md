@@ -1,5 +1,5 @@
 
-# Papers Gem
+# Papers
 
 "Papers, please."
 
@@ -7,9 +7,18 @@ Checks that your Rails project's dependencies are licensed with only the license
 
 ## Usage
 
-0. In your Rails app using this gem...
-1. rake papers:generate_test
+0. Add gem to your Gemfile:
+```ruby
+gem 'papers'
+```
+1. Generate test
+```shell
+$ rake papers:generate_test
+```
 2. Run the test, created in test/integration/papers_license_validation_test.rb
+```shell
+$ rake test test/integration/papers_license_validation_test.rb
+```
 
 ## License
 
