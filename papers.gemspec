@@ -1,13 +1,22 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+require 'papers/version'
+
 Gem::Specification.new do |s|
   s.name        = 'papers'
-  s.version     = '0.0.1'
-  s.date        = '2013-01-30'
-  s.summary     = "License verifier"
-  s.description = "License verifier"
-  s.authors     = ["New Relic"]
-  s.email       = "support@newrelic.com"
-  s.license     = "MIT"
-  s.files       = ["lib/papers.rb", "lib/railtie.rb", "lib/papers/dependency_license_validator.rb", "lib/tasks/papers.rake"]
-  s.homepage    =
-    "http://github.com/newrelic"
+  s.version     = Papers::VERSION
+  s.summary     = 'Validate the licences of software you use'
+
+  s.description = <<-DESCRIPTION
+Validate that the licenses used by your Ruby project's dependencies (both gems
+and javascript libraries) conform to a whitelist of software licenses. Don't get
+caught flat-footed by the GPL.
+  DESCRIPTION
+
+  s.authors     = ['Lucas Charles']
+  s.email       = 'support@newrelic.com'
+  s.license     = 'MIT'
+  s.files       = Dir['lib/**/*.rb']
+  s.homepage    = 'http://github.com/newrelic/papers'
+
+  s.add_development_dependency 'rspec'
 end
