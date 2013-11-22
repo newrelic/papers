@@ -16,7 +16,8 @@ module Papers
         'BSD',
         'Apache 2.0',
         'LGPLv2.1',
-        'LGPLv3'
+        'LGPLv3',
+        'None'
       ]
 
       @manifest_file = File.join(Dir.pwd, 'config', 'dependency_manifest.yml')
