@@ -1,5 +1,6 @@
 require 'yaml'
 
+require 'papers/dependency_specification'
 require 'papers/dependency_specification/gem'
 require 'papers/dependency_specification/javascript'
 

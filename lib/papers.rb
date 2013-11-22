@@ -1,7 +1,10 @@
 require 'papers/configuration'
 require 'papers/license_validator'
-require 'papers/dependency_specification'
 require 'papers/version'
+
+require 'papers/dependency_specification'
+require 'papers/dependency_specification/gem'
+require 'papers/dependency_specification/javascript'
 
 module Papers
   def self.configure(&block)

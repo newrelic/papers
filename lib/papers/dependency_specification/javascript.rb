@@ -1,5 +1,5 @@
 module Papers
-  class Javascript < DependencySpec
+  class Javascript < DependencySpecification
     def pretty_hash
       {
         name: @name,
