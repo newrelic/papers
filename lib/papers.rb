@@ -11,8 +11,13 @@ module Papers
     yield configuration
   end
 
-  def configuration
-    @config ||= configuration.new
+  def self.configuration
+    @config ||= Configuration.new
   end
-  alias config configuration
+
+  # alias
+  def self.config
+    configuration
+  end
+
 end

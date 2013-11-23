@@ -19,5 +19,5 @@ caught flat-footed by the GPL.
   s.homepage    = 'http://github.com/newrelic/papers'
 
   s.add_development_dependency "shoulda"
-  # s.add_development_dependency 'rspec', '~> 2.8.0'
+  s.add_development_dependency 'rspec', '~> 2.8.0'
 end
