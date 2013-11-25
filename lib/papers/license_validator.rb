@@ -26,11 +26,11 @@ module Papers
     end
 
     def pretty_gem_list
-      GemSpec.all_from_manifest(manifest).map(&:pretty_hash)
+      Gem.all_from_manifest(manifest).map(&:pretty_hash)
     end
 
     def pretty_js_list
-      JsSpec.all_from_manifest(manifest).map(&:pretty_hash)
+      Javascript.all_from_manifest(manifest).map(&:pretty_hash)
     end
 
     private
