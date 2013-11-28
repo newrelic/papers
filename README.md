@@ -1,4 +1,3 @@
-
 # Papers
 
 "Papers, please."
@@ -7,22 +6,22 @@ Checks that your Rails project's dependencies are licensed with only the license
 
 ## Usage
 
-add gem
-create dependency manifest
-run test
+tl;dr -- add gem, generate dependency manifest, run spec
 
+#### 0. Add gem to Gemfile and bundle
 
-0. Add gem to your Gemfile:
 ```
 gem 'papers'
 ```
-1. Generate Dependency Manifest from your bundled gems and JS
+#### 1. Generate [Dependency Manifest](#depency-manifest-example) from your bundled gems and JS
+
 ```
 $ bundle exec rake papers:generate_manifest
 ```
-2. Create validation test (see below for example)
+#### 2. Create [Validation Spec](#validation-spec-example)
 
-3.Run the test
+#### 3. Run the specs
+
 ```
 $ rake spec spec/integration/papers_license_validation_spec.rb
 ...
@@ -33,7 +32,7 @@ haml-4.0.0 is in the app, but not in the manifest
 ...
 ```
 
-### Validation Test Example
+## Validation Spec example
 
 ```
 # => spec/integration/papers_license_validation_spec.rb
@@ -49,8 +48,9 @@ class PapersLicenseValidationTest < ActiveSupport::TestCase
 end
 ```
 
-### papers_manifest.yml dependencies example
+## Dependency Manifest example
 ```
+# => config/papers_manifest.yml
 ---
 gems:
   sqlite3-1.3.7:
