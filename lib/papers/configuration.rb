@@ -17,10 +17,11 @@ module Papers
         'Apache 2.0',
         'LGPLv2.1',
         'LGPLv3',
-        'None'
+        'Manually Reviewed',
+        'Unlicensed'
       ]
 
-      @manifest_file = File.join(Dir.pwd, 'config', 'dependency_manifest.yml')
+      @manifest_file = File.join(Dir.pwd, 'config', 'papers_manifest.yml')
 
       @validate_gems       = true
       @validate_javascript = false

@@ -10,9 +10,9 @@ module Papers
     end
 
     def self.introspected
-      dirs = []
-      dirs << File.join(Rails.root, "app", "assets", "javascripts")
+      dirs = Papers.config.javascript_paths
 
+      # TODO: not just rails, change to Dir.pwd
       root_regexp = /^#{Regexp.escape Rails.root.to_s}\//
       dirs.map { |dir| Dir["#{dir}/**/*.js"] }.flatten.map { |name| name.sub(root_regexp, '') }
     end
