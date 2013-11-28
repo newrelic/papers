@@ -16,16 +16,15 @@ run test
 ```
 gem 'papers'
 ```
-1. Create Dependency Manifest (see below for example)
+1. Generate Dependency Manifest from your bundled gems and JS
 ```
-$ touch ./config/dependency_manifest.yml
+$ bundle exec rake papers:generate_manifest
 ```
-2. Generate validation test (see below for example)
+2. Create validation test (see below for example)
 
-3.Run the test, created in test/integration/papers_license_validation_test.rb
-````
-$ rake test test/integration/papers_license_validation_test.rb
+3.Run the test
 ```
+$ rake spec spec/integration/papers_license_validation_spec.rb
 ...
   1) Failure:
 test_know_and_be_satisfied_by_all_licenses(PapersLicenseValidationTest)
@@ -37,21 +36,20 @@ haml-4.0.0 is in the app, but not in the manifest
 ### Validation Test Example
 
 ```
-# => test/integration/papers_license_validation_test.rb
+# => spec/integration/papers_license_validation_spec.rb
 
-require 'test_helper'
+require 'spec_helper'
 require 'papers'
 
 class PapersLicenseValidationTest < ActiveSupport::TestCase
   def test_know_and_be_satisfied_by_all_licenses
-    validator = Papers::DependencyLicenseValidator.new
+    validator = Papers::LicenseValidator.new
     assert validator.valid?, "License validator failed:\n#{validator.errors.join("\n")}"
   end
 end
 ```
 
-### dependency_manifest.yml Example
-[see dependency_manifest.yml.sample for Rails 3.2](https://github.com/newrelic/papers/blob/master/templates/dependency_manifest.yml.sample)
+### papers_manifest.yml dependencies example
 ```
 ---
 gems:
