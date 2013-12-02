@@ -12,8 +12,8 @@ module Papers
     def self.introspected
       dirs = Papers.config.javascript_paths
 
-      # TODO: not just rails, change to Dir.pwd
-      root_regexp = /^#{Regexp.escape Rails.root.to_s}\//
+      # TODO: add logic for determining rails. Is Rails.root better than Dir.pwd for such a case?
+      root_regexp = /^#{Regexp.escape Dir.pwd.to_s}\//
       dirs.map { |dir| Dir["#{dir}/**/*.js"] }.flatten.map { |name| name.sub(root_regexp, '') }
     end
 

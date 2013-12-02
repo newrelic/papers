@@ -1,3 +1,4 @@
+require 'bundler'
 require 'yaml'
 require 'fileutils'
 
@@ -5,7 +6,7 @@ module Papers
 
   class ManifestGenerator
 
-    def self.generate!
+    def generate!
       manifest_path = File.join('config','papers_manifest.yml')
 
       if File.exist? manifest_path
@@ -39,7 +40,7 @@ module Papers
           'project_url' => spec.homepage,
           'license' => spec.license,
           'license_url' => ''
-          # TODO: add support for multiple licenses?
+          # TODO: add support for multiple licenses? some gemspecs have dual licensing
         }
       end
       return gems
@@ -49,12 +50,12 @@ module Papers
       js = {}
       Javascript.introspected.each do |entry|
         js[entry] = {
-          'license' => 'Unknown'
-          'license_url' => ''
+          'license' => 'Unknown',
+          'license_url' => '',
           'project_url' => ''
         }
       end
-      return js
+      js.empty? ? nil : js
     end
 
   end

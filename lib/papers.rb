@@ -1,5 +1,6 @@
 require 'papers/configuration'
 require 'papers/license_validator'
+require 'papers/manifest_generator'
 require 'papers/version'
 
 require 'papers/dependency_specification'
