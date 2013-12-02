@@ -10,6 +10,7 @@ module Papers
       manifest_path = File.join('config','papers_manifest.yml')
 
       if File.exist? manifest_path
+        # TEMP: should this be a raise?
         puts "Warning file already exists at #{manifest_path}. Aborting..."
         return
       else

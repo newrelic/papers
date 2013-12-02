@@ -5,5 +5,4 @@ $LOAD_PATH.unshift(File.dirname(File.realpath(__FILE__)) + '/../lib')
 require 'papers'
 
 generator = Papers::ManifestGenerator.new
-
 generator.generate!
