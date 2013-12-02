@@ -20,13 +20,15 @@ caught flat-footed by the GPL.
   s.license     = 'MIT'
   s.homepage    = 'http://github.com/newrelic/papers'
 
-  s.files       = `git ls-files`.split("\n")
-  s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.files       = `git ls-files`.split($/)
+  s.test_files  = `git ls-files -- {test,spec,features}/*`.split($/)
+  s.executables = s.files.grep(/^bin\//) { |f| File.basename(f) }
 
-  s.require_paths = ["lib"]
+
+  s.require_paths = ['lib']
 
   # dependencies
-  s.add_dependency "rake"
+  s.add_dependency 'rake', '~> 10.1'
 
   s.add_development_dependency 'rspec', '~> 2.14'
 end

@@ -4,23 +4,34 @@ require 'fileutils'
 
 module Papers
 
+  class FileExistsError < StandardError;
+    attr_reader :manifest_path
+
+    def initialize(path)
+      @manifest_path = path
+      super
+    end
+  end
+
   class ManifestGenerator
 
-    def generate!
-      manifest_path = File.join('config','papers_manifest.yml')
+    def generate!(args = ARGV)
+      @manifest_path = File.join('config','papers_manifest.yml')
 
-      if File.exist? manifest_path
-        # TEMP: should this be a raise?
-        puts "Warning file already exists at #{manifest_path}. Aborting..."
-        return
+      if manifest_exists?
+        raise Papers::FileExistsError.new(@manifest_path)
       else
-        puts "Creating #{manifest_path}..."
-
-        if FileUtils.mkdir_p(File.dirname(manifest_path))
-          File.open(manifest_path, 'w') do |file|
-            file.write(YAML.dump(build_manifest))
+        begin
+          if FileUtils.mkdir_p(File.dirname(@manifest_path))
+            File.open(@manifest_path, 'w') do |file|
+              file.write("# Dependency Manifest for the Papers gem\n")
+              file.write("# Used to test your gems and javascript against license whitelist\n")
+              file.write(YAML.dump(build_manifest))
+            end
+            puts "Created #{@manifest_path}!"
           end
-          puts "Created manifest!"
+        rescue RuntimeError => e
+          warn "Failure! #{e}"
         end
       end
     end
@@ -39,7 +50,7 @@ module Papers
       Bundler.load.specs.each do |spec|
         gems["#{spec.name}-#{spec.version}"] = {
           'project_url' => spec.homepage,
-          'license' => spec.license,
+          'license' => spec.license || 'Unknown',
           'license_url' => ''
           # TODO: add support for multiple licenses? some gemspecs have dual licensing
         }
@@ -58,6 +69,11 @@ module Papers
       end
       js.empty? ? nil : js
     end
+
+    def manifest_exists?
+      !!File.exist?(@manifest_path)
+    end
+
 
   end
 

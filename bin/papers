@@ -5,4 +5,9 @@ $LOAD_PATH.unshift(File.dirname(File.realpath(__FILE__)) + '/../lib')
 require 'papers'
 
 generator = Papers::ManifestGenerator.new
-generator.generate!
+
+begin
+  generator.generate!
+rescue Papers::FileExistsError => e
+  warn "Error: 'papers_manifest.yml' already exists at '#{e.message}'. Aborting..."
+end
