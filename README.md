@@ -25,10 +25,25 @@ $ papers
 ```
 $ rake spec spec/integration/papers_license_validation_spec.rb
 ...
-  1) Failure:
-test_know_and_be_satisfied_by_all_licenses(PapersLicenseValidationTest)
-License validator failed:
-haml-4.0.0 is in the app, but not in the manifest
+Failures:
+
+  1) Papers License Validation finds no errors during license validation
+     Failure/Error: expect(validator.errors).to eq([])
+
+       expected: []
+            got: ["sass-3.2.12 is licensed under GPL, which is not whitelisted"]
+
+       (compared using ==)
+     # ./spec/integration/papers_license_validation_spec.rb:14:in `block (2 levels) in <top (required)>'
+
+  2) Papers License Validation knows and is satisfied by all dependency licenses
+     Failure/Error: expect(validator.valid?).to be_true
+       expected: true value
+            got: false
+     # ./spec/integration/papers_license_validation_spec.rb:9:in `block (2 levels) in <top (required)>'
+
+Finished in 0.01043 seconds
+2 examples, 2 failures
 ...
 ```
 
