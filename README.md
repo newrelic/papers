@@ -8,17 +8,17 @@ Checks that your Rails project's dependencies are licensed with only the license
 
 tl;dr -- add gem, generate dependency manifest, run spec
 
-#### 0. Add gem to Gemfile and bundle
+#### 0. Add gem to Gemfile
 
 ```
 gem 'papers'
 ```
-#### 1. Generate [Dependency Manifest](#depency-manifest-example) from your bundled gems and JS
+#### 1. Generate Dependency Manifest from your bundled gems and JS
 
 ```
-$ bundle exec rake papers:generate_manifest
+$ papers
 ```
-#### 2. Create [Validation Spec](#validation-spec-example)
+#### 2. Create [Validation Spec](#testing-with-rspec)
 
 #### 3. Run the specs
 
@@ -32,7 +32,9 @@ haml-4.0.0 is in the app, but not in the manifest
 ...
 ```
 
-## Validation Spec example
+## Validations
+
+### testing with RSpec
 
 ```
 # => spec/integration/papers_license_validation_spec.rb
@@ -40,15 +42,43 @@ haml-4.0.0 is in the app, but not in the manifest
 require 'spec_helper'
 require 'papers'
 
-class PapersLicenseValidationTest < ActiveSupport::TestCase
-  def test_know_and_be_satisfied_by_all_licenses
-    validator = Papers::LicenseValidator.new
-    assert validator.valid?, "License validator failed:\n#{validator.errors.join("\n")}"
+describe 'Papers License Validation' do
+
+  let(:validator) { Papers::LicenseValidator.new }
+
+  it 'knows and is satisfied by all dependency licenses' do
+    expect(validator.valid?).to be_true
+  end
+
+  it 'finds no errors during license validation' do
+    validator.valid?
+    expect(validator.errors).to eq([])
   end
 end
 ```
 
-## Dependency Manifest example
+### testing with MiniTest
+
+```
+# => test/integration/papers_license_validation_test.rb
+
+require 'test_helper'
+require 'papers'
+
+class PapersLicenseValidationTest < ActiveSupport::TestCase
+  def test_know_and_be_satisfied_by_all_licenses
+    validator = Papers::LicenseValidator.new
+
+    assert validator.valid?, "License validator failed:\n#{validator.errors.join("\n")}"
+
+    assert_equal validator.errors, []
+  end
+end
+```
+
+
+## Dependency Manifest structure
+
 ```
 # => config/papers_manifest.yml
 ---
@@ -57,6 +87,7 @@ gems:
     license: MIT
     license_url: https://github.com/luislavena/sqlite3-ruby
     project_url: https://github.com/luislavena/sqlite3-ruby/blob/master/LICENSE
+...
 
 javascripts:
   app/assets/javascripts/application.js:
