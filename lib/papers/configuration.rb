@@ -15,8 +15,10 @@ module Papers
         'MIT',
         'BSD',
         'Apache 2.0',
+        'Apache-2.0',
         'LGPLv2.1',
         'LGPLv3',
+        'Ruby',
         'Manually Reviewed',
         'Unlicensed'
       ]
