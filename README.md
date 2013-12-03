@@ -1,26 +1,35 @@
 # Papers
 
-"Papers, please."
+> "Papers, please."
 
-Checks that your Rails project's dependencies are licensed with only the licenses in a whitelist you specify. Validates the licenses of your gems and JavaScript files, which are listed in a YAML manifest file.
+Check that your Ruby/Rails project's dependencies are licensed with only the licenses you specify.  **Papers** will validate that your gems and JavaScript files conform to a whitelist of software licenses. Don't get caught flat-footed by the GPL.
 
-## Usage
+# Contents
+ * [Usage](#usage)
+ * [Validations](#validations)
+ * [Configuration](#configuration)
+ * [Structure of Dependency Manifest](#dependency-manifest-structure)
+ * [License](#license)
+ * [Contributing](#contributing)
+
+
+# Usage
 
 tl;dr -- add gem, generate dependency manifest, run spec
 
-#### 0. Add gem to Gemfile
+### 0. Add gem to Gemfile
 
 ```
 gem 'papers'
 ```
-#### 1. Generate Dependency Manifest from your bundled gems and JS
+### 1. Generate Dependency Manifest from your bundled gems and JS
 
 ```
 $ papers
 ```
-#### 2. Create [Validation Spec](#testing-with-rspec)
+### 2. Create [Validation Spec](#testing-with-rspec)
 
-#### 3. Run the specs
+### 3. Run the specs
 
 ```
 $ rake spec spec/integration/papers_license_validation_spec.rb
@@ -47,9 +56,9 @@ Finished in 0.01043 seconds
 ...
 ```
 
-## Validations
+# Validations
 
-### testing with RSpec
+## testing with RSpec
 
 ```
 # => spec/integration/papers_license_validation_spec.rb
@@ -72,7 +81,7 @@ describe 'Papers License Validation' do
 end
 ```
 
-### testing with MiniTest
+## testing with MiniTest
 
 ```
 # => test/integration/papers_license_validation_test.rb
@@ -91,7 +100,7 @@ class PapersLicenseValidationTest < ActiveSupport::TestCase
 end
 ```
 
-## Configuration
+# Configuration
 
 The default whitelist allows for permissive licensing for proprietary or commercial usage while avoiding strong copyleft licenses.
 
@@ -109,7 +118,7 @@ The default whitelist allows for permissive licensing for proprietary or commerc
 ]
 ```
 
-### Available configuration options
+## Available configuration options
 
 To configure the Papers gem, pass options to ```Papers.configure``` before initialization of LicenseValidator:
 
@@ -126,7 +135,7 @@ validator = Papers::LicenseValidator.new
 ...
 ```
 
-## Dependency Manifest structure
+# Dependency Manifest structure
 
 ```
 # => config/papers_manifest.yml
@@ -145,10 +154,10 @@ javascripts:
     project_url: http://newrelic.com
 ```
 
-## License
+# License
 
 The Papers Gem is licensed under the __MIT License__.  See [MIT-LICENSE](https://github.com/newrelic/papers/blob/master/MIT-LICENSE) for full text.
 
-## Contributing
+# Contributing
 
 You are welcome to send pull requests to us - however, by doing so you agree that you are granting New Relic a non-exclusive, non-revokable, no-cost license to use the code, algorithms, patents, and ideas in that code in our products if we so choose. You also agree the code is provided as-is and you provide no warranties as to its fitness or correctness for any purpose.
