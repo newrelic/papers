@@ -26,7 +26,7 @@ module Papers
       @manifest_file = File.join(Dir.pwd, 'config', 'papers_manifest.yml')
 
       @validate_gems       = true
-      @validate_javascript = false
+      @validate_javascript = true
 
       @javascript_paths = [
         File.join(Dir.pwd, 'app',    'assets', 'javascripts'),
