@@ -91,6 +91,40 @@ class PapersLicenseValidationTest < ActiveSupport::TestCase
 end
 ```
 
+## Configuration
+
+The default whitelist allows for permissive licensing for proprietary or commercial usage while avoiding strong copyleft licenses.
+
+```
+@license_whitelist = [
+  'MIT',
+  'BSD',
+  'Apache 2.0',
+  'Apache-2.0',
+  'LGPLv2.1',
+  'LGPLv3',
+  'Ruby',
+  'Manually Reviewed',
+  'Unlicensed'
+]
+```
+
+### Available configuration options
+
+To configure the Papers gem, pass options to ```Papers.configure``` before initialization of LicenseValidator:
+
+```
+Papers.configure do |c|
+  c.license_whitelist << 'New Relic'
+  c.manifest_file = File.join('some','other','dependency_manifest.yml')
+  c.validate_gems = true
+  c.validate_javascript = true
+  c.javascript_paths << File.join('some','other','javascripts')
+end
+
+validator = Papers::LicenseValidator.new
+...
+```
 
 ## Dependency Manifest structure
 
