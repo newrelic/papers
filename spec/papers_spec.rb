@@ -123,32 +123,6 @@ describe 'Papers' do
     validator.valid?
   end
 
-  # TEMP: this test doesn't do what its saying
-  xit 'allows a license_url in the manifest definition' do
-    #     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
-    #   "javascripts" => {},
-    #   "gems" => {
-    #     "foo-1.2" => {
-    #       'license' => "MIT",
-    #       'license_url' => nil,
-    #       'project_url' => nil
-    #     },
-    #     "baz-1.3" => {
-    #       'license' => "BSD",
-    #       'license_url' => nil,
-    #       'project_url' => nil
-    #     }
-    #   },
-    # })
-    # Papers::Gem.stub(:introspected).and_return(["bar-1.2", "baz-1.3"])
-
-    # expect(validator.valid?).to be_false
-    # expect(validator.errors).to eq([
-    #   "bar-1.2 is included in the application, but not in the manifest",
-    #   "foo-1.2 is included in the manifest, but not in the application"
-    # ])
-  end
-
   it 'displays gem licenses in a pretty format without versions' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       "javascripts" => {},

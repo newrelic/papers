@@ -23,8 +23,7 @@ module Papers
       begin
         if FileUtils.mkdir_p(File.dirname(@manifest_path))
           File.open(@manifest_path, 'w') do |file|
-            file.write("# Dependency Manifest for the Papers gem\n")
-            file.write("# Used to test your gems and javascript against license whitelist\n")
+            file.write(build_header)
             file.write(YAML.dump(build_manifest))
           end
           puts "Created #{@manifest_path}!"
@@ -79,6 +78,14 @@ module Papers
       !!File.exist?(@manifest_path)
     end
 
+    def build_header
+      [
+        "# Dependency Manifest for the Papers gem",
+        "# Used to test your gems and javascript against license whitelist",
+        "#",
+        "# http://github.com/newrelic/papers\n"
+      ].join("\n")
+    end
 
   end
 
