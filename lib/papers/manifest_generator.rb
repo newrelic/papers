@@ -53,9 +53,9 @@ module Papers
         end
 
         gems[name_and_version] = {
-          'project_url' => spec.homepage,
           'license'     => spec.license || 'Unknown',
-          'license_url' => ''
+          'license_url' => nil,
+          'project_url' => spec.homepage || nil
           # TODO: add support for multiple licenses? some gemspecs have dual licensing
         }
       end
@@ -67,8 +67,8 @@ module Papers
       Javascript.introspected.each do |entry|
         js[entry] = {
           'license'     => 'Unknown',
-          'license_url' => '',
-          'project_url' => ''
+          'license_url' => nil,
+          'project_url' => nil
         }
       end
       js.empty? ? nil : js
