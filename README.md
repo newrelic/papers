@@ -6,7 +6,7 @@ Check that your Ruby/Rails project's dependencies are licensed with only the lic
 
 # Contents
  * [Usage](#usage)
- * [Validations](#validations)
+ * [Example Validations](#example-validations)
  * [Configuration](#configuration)
  * [Structure of Dependency Manifest](#dependency-manifest-structure)
  * [License](#license)
@@ -25,9 +25,10 @@ gem 'papers'
 ### 1. Generate Dependency Manifest from your bundled gems and JS
 
 ```
-$ papers
+$ papers --generate
+Created config/papers_manifest.yml!
 ```
-### 2. Create [Validation Spec](#testing-with-rspec)
+### 2. Create a Validation Spec (or [use ours](#testing-with-rspec))
 
 ### 3. Run the specs
 
@@ -56,7 +57,7 @@ Finished in 0.01043 seconds
 ...
 ```
 
-# Validations
+# Example Validations
 
 ## testing with RSpec
 
@@ -120,7 +121,7 @@ The default whitelist allows for permissive licensing for proprietary or commerc
 
 ## Available configuration options
 
-To configure the Papers gem, pass options to ```Papers.configure``` before initialization of LicenseValidator:
+To configure the Papers gem, pass options to ```Papers.configure``` before initialization of LicenseValidator.  Currently supported config options:
 
 ```
 Papers.configure do |c|
