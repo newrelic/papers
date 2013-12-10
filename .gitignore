@@ -3,3 +3,4 @@ config/*
 Guardfile
 *.swp
 Gemfile.lock
+*.gem
