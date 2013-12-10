@@ -1,6 +1,7 @@
 require 'bundler'
 require 'yaml'
 require 'fileutils'
+require 'uri'
 
 module Papers
 
@@ -52,10 +53,13 @@ module Papers
           name_and_version = "#{spec.name}-#{spec.version}"
         end
 
+        gem_license     = blank?(spec.license) ? 'Unknown' : spec.license
+        gem_project_url = blank?(spec.homepage) ? nil : spec.homepage
+
         gems[name_and_version] = {
-          'license'     => spec.license || 'Unknown',
+          'license'     => gem_license,
           'license_url' => nil,
-          'project_url' => spec.homepage || nil
+          'project_url' => ensure_valid_url(gem_project_url)
           # TODO: add support for multiple licenses? some gemspecs have dual licensing
         }
       end
@@ -85,6 +89,19 @@ module Papers
         "#",
         "# http://github.com/newrelic/papers\n"
       ].join("\n")
+    end
+
+    def ensure_valid_url url_string
+      match_url = URI::regexp.match(url_string)
+      if match_url.nil?
+        nil
+      else
+        match_url[0]
+      end
+    end
+
+    def blank? str
+      str.respond_to?(:empty?) ? str.empty? : !str
     end
 
   end
