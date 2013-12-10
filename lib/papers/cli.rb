@@ -30,9 +30,10 @@ module Papers
           p opts
           exit
         end
-
-      p opts if options.empty?
+        @avail_opts = opts
       end.parse!
+
+      p @avail_opts if options.empty?
 
       return options
     end
