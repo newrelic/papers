@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 
   s.description = <<-DESCRIPTION
 Validate that the licenses used by your Ruby project's dependencies (both gems
-and javascript libraries) conform to a whitelist of software licenses. Don't get
+and javascript libraries) conform to a software license whitelist. Don't get
 caught flat-footed by the GPL.
   DESCRIPTION
 
@@ -24,11 +24,9 @@ caught flat-footed by the GPL.
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split($/)
   s.executables = s.files.grep(/^bin\//) { |f| File.basename(f) }
 
-
   s.require_paths = ['lib']
 
   # dependencies
   s.add_dependency 'rake', '~> 10.1'
-
   s.add_development_dependency 'rspec', '~> 2.14'
 end
