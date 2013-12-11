@@ -1,1 +1,6 @@
-papers*.gem
+config/*
+.DS_Store
+Guardfile
+*.swp
+Gemfile.lock
+*.gem
