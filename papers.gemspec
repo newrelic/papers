@@ -27,6 +27,6 @@ caught flat-footed by the GPL.
   s.require_paths = ['lib']
 
   # dependencies
-  s.add_dependency 'rake', '~> 10.1'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.14'
 end
