@@ -15,7 +15,7 @@ and javascript libraries) conform to a software license whitelist. Don't get
 caught flat-footed by the GPL.
   DESCRIPTION
 
-  s.authors     = ['Ralph Bodenner', 'Jade Rubick', 'Andrew Bloomgarden', 'Lucas Charles']
+  s.authors     = ['Ralph Bodenner', 'Jade Rubick', 'Andrew Bloomgarden', 'Lucas Charles', 'David Celis']
   s.email       = 'support@newrelic.com'
   s.license     = 'MIT'
   s.homepage    = 'http://github.com/newrelic/papers'
