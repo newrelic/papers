@@ -38,8 +38,9 @@ module Papers
 
     def build_manifest
       manifest = {
-        "gems"        => get_installed_gems,
-        "javascripts" => get_installed_javascripts
+        "gems"             => get_installed_gems,
+        "javascripts"      => get_installed_javascripts,
+        "bower_components" => get_installed_bower_components
       }
       return manifest
     end
@@ -76,6 +77,18 @@ module Papers
         }
       end
       js.empty? ? nil : js
+    end
+
+    def get_installed_bower_components
+      components = {}
+      BowerComponent.full_introspected_entries.each do |entry|
+        components[entry['name']] = {
+          'license' => 'Unknown',
+          'license_url' => nil,
+          'project_url' => ensure_valid_url(entry['homepage'])
+        }
+      end
+      components.empty? ? nil : components
     end
 
     def manifest_exists?

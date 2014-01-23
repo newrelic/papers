@@ -81,6 +81,13 @@ Papers.configure do |config|
   #
   # %w[app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts]
   config.javascript_paths << File.join('public', 'javascripts')
+
+  # Configures Papers to validate licenses for bower components. Defaults to false.
+  config.validate_bower_components = false
+
+  # Configures where Papers should look for bower components. Each component
+  # must have a .bower.json file in its directory for Papers to see it.
+  config.bower_components_path = 'vendor/assets/components'
 end
 ```
 
