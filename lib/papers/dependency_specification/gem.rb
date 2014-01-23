@@ -12,7 +12,7 @@ module Papers
     def self.introspected
       Bundler.load.specs.map do |spec|
         # bundler versions aren't controlled by the Gemfile
-        if spec.name == "bundler"
+        if spec.name == 'bundler'
           spec.name
         else
           "#{spec.name}-#{spec.version}"
