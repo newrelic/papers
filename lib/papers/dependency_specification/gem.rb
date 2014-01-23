@@ -9,11 +9,6 @@ module Papers
       }
     end
 
-    def name_without_version
-      return @name unless @name.include?('-')
-      @name.split('-')[0..-2].join('-')
-    end
-
     def self.introspected
       Bundler.load.specs.map do |spec|
         # bundler versions aren't controlled by the Gemfile

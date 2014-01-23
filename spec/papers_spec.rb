@@ -45,9 +45,7 @@ describe 'Papers' do
   end
 
   it 'detects mismatched gem versions' do
-    Papers::Configuration.any_instance.stub(:validate_javascript?).and_return(true)
-
-    expect(validator).to receive(:validate_js).at_least(:once)
+    Papers::Configuration.any_instance.stub(:validate_javascript?).and_return(false)
 
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       "javascripts" => {},
@@ -196,6 +194,52 @@ describe 'Papers' do
         :project_url => nil
       }
     ])
+  end
+
+  it 'displays bower component licenses in a pretty format without versions' do
+    Papers::Configuration.any_instance.stub(:validate_bower_components?).and_return(true)
+
+    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+      "javascripts" => {},
+      "gems" => {},
+      "bower_components" => {
+        "foo-1.2" => {
+          'license' => "MIT",
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        "baz-1.3" => {
+          'license' => "BSD",
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        "with-hyphens-1.4" => {
+          'license' => "MIT",
+          'license_url' => nil,
+          'project_url' => nil
+        }
+      },
+    })
+    expect(validator.pretty_bower_component_list).to eq([
+      {
+        :name=>"baz",
+        :license=>"BSD",
+        :license_url => nil,
+        :project_url => nil
+      },
+      {
+        :name=>"foo",
+        :license=>"MIT",
+        :license_url => nil,
+        :project_url => nil
+      },
+      {
+        :name=>"with-hyphens",
+        :license=>"MIT",
+        :license_url => nil,
+        :project_url => nil
+        }
+      ])
   end
 
   it 'displays the gem name when the gemspec does not specify a version' do

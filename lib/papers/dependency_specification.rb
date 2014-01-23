@@ -9,6 +9,11 @@ module Papers
       @project_url = options[:project_url]
     end
 
+    def name_without_version
+      return @name unless @name.include?('-')
+      @name.split('-')[0..-2].join('-')
+    end
+
     def acceptable_license?
       Papers.config.license_whitelist.include?(license)
     end

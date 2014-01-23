@@ -3,6 +3,7 @@ require 'yaml'
 require 'papers/dependency_specification'
 require 'papers/dependency_specification/gem'
 require 'papers/dependency_specification/javascript'
+require 'papers/dependency_specification/bower_component'
 
 module Papers
   class LicenseValidator
@@ -15,8 +16,9 @@ module Papers
     def valid?
       @errors = []
 
-      validate_gems if Papers.config.validate_gems?
-      validate_js   if Papers.config.validate_javascript?
+      validate_spec_type(Gem)            if Papers.config.validate_gems?
+      validate_spec_type(Javascript)     if Papers.config.validate_javascript?
+      validate_spec_type(BowerComponent) if Papers.config.validate_bower_components?
 
       @errors.empty?
     end
@@ -31,6 +33,10 @@ module Papers
 
     def pretty_js_list
       Javascript.all_from_manifest(manifest).map(&:pretty_hash)
+    end
+
+    def pretty_bower_component_list
+      BowerComponent.all_from_manifest(manifest).map(&:pretty_hash)
     end
 
     private
@@ -49,14 +55,6 @@ module Papers
             errors << "#{spec.name} is licensed under #{spec.license}, which is not whitelisted"
           end
         end
-      end
-
-      def validate_gems
-        validate_spec_type Gem
-      end
-
-      def validate_js
-        validate_spec_type Javascript
       end
   end
 end
