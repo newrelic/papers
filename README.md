@@ -101,7 +101,7 @@ describe 'Papers License Validation' do
   subject(:validator) { Papers::LicenseValidator.new }
 
   it 'knows and is satisfied by all dependency licenses' do
-    expect(validator).to be_valid, "License validator failed:\n#{validator.errors.join("\n")}"
+    expect(validator).to be_valid, -> { "License validation failed:\n#{validator.errors.join("\n")}" }
   end
 end
 
@@ -112,7 +112,7 @@ class PapersLicenseValidationTest < ActiveSupport::TestCase
   def test_know_and_be_satisfied_by_all_licenses
     validator = Papers::LicenseValidator.new
 
-    assert validator.valid?, "License validator failed:\n#{validator.errors.join("\n")}"
+    assert validator.valid?, "License validation failed:\n#{validator.errors.join("\n")}"
   end
 end
 ```
