@@ -1,6 +1,7 @@
 module Papers
   class Configuration
     attr_accessor :license_whitelist
+    attr_accessor :version_whitelisted_license
 
     attr_accessor :manifest_file
 
@@ -23,6 +24,8 @@ module Papers
         'Manually Reviewed',
         'Unlicensed'
       ]
+
+      @version_whitelisted_license = nil
 
       @manifest_file = File.join(Dir.pwd, 'config', 'papers_manifest.yml')
 

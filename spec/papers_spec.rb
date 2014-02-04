@@ -103,6 +103,27 @@ describe 'Papers' do
     expect(validator.valid?).to be_true
   end
 
+  it 'is OK with whitelisting gem versions on a specific license' do
+    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+      'javascripts' => {},
+      'gems' => {
+        'foo' => { 'license' => 'MIT' },
+        'baz' => { 'license' => 'BSD' }
+      }
+    })
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.2', licenses: ['BSD'])
+    ])
+    Papers::Configuration.any_instance.stub(:version_whitelisted_license).and_return('MIT')
+
+    expect(validator).not_to be_valid
+    expect(validator.errors).to eq([
+      'baz-1.2 is included in the application, but not in the manifest',
+      'baz is included in the manifest, but not in the application'
+    ])
+  end
+
   it 'is OK with matching gem sets but complain about a license issue' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       'javascripts' => {},

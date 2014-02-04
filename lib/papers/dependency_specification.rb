@@ -15,7 +15,8 @@ module Papers
     end
 
     def acceptable_license?
-      Papers.config.license_whitelist.include?(license)
+      Papers.config.license_whitelist.include?(license) ||
+      Papers.config.version_whitelisted_license == license
     end
 
     protected

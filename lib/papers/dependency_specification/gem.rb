@@ -11,8 +11,10 @@ module Papers
 
     def self.introspected
       Bundler.load.specs.map do |spec|
-        # bundler versions aren't controlled by the Gemfile
+        # Bundler versions aren't controlled by the Gemfile
         if spec.name == 'bundler'
+          spec.name
+        elsif spec.licenses.include?(Papers.config.version_whitelisted_license)
           spec.name
         else
           "#{spec.name}-#{spec.version}"

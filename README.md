@@ -66,7 +66,11 @@ Papers.configure do |config|
   #   'Manually Reviewed',
   #   'Unlicensed'
   # ]
-  config.license_whitelist << 'New Relic'
+  # config.license_whitelist << 'New Relic'
+
+  # You can specify a single license that, when used, ignores the version. Defaults to nil.
+  # WARNING: You should only use this for software licensed in house.
+  # config.version_whitelisted_license = 'New Relic'
 
   # The location of your dependency manifest. Defaults to config/papers_manifest.yml
   config.manifest_file = File.join('config', 'papers_manifest.yml')
@@ -87,7 +91,7 @@ Papers.configure do |config|
 
   # Configures where Papers should look for bower components. Each component
   # must have a .bower.json file in its directory for Papers to see it.
-  config.bower_components_path = 'vendor/assets/components'
+  # config.bower_components_path = 'vendor/assets/components'
 end
 ```
 
