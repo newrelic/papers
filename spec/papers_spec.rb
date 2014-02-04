@@ -18,21 +18,16 @@ describe 'Papers' do
 
   it 'detects mismatched gems' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
-        'javascripts' => {},
-        'gems' => {
-          'foo-1.2' => {
-            'license' => 'MIT',
-            'license_url' => nil,
-            'project_url' => nil
-          },
-          'baz-1.3' => {
-            'license' => 'BSD',
-            'license_url' => nil,
-            'project_url' => nil
-          }
-        }
-      })
-    Papers::Gem.stub(:introspected).and_return(['bar-1.2', 'baz-1.3'])
+      'javascripts' => {},
+      'gems' => {
+        'foo-1.2' => { 'license' => 'MIT' },
+        'baz-1.3' => { 'license' => 'BSD' }
+      }
+    })
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'bar', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.3', licenses: ['BSD'])
+    ])
 
     expect(validator.valid?).to be_false
 
@@ -50,19 +45,14 @@ describe 'Papers' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
-        'foo-1.2' => {
-          'license' => 'MIT',
-          'license_url' => nil,
-          'project_url' => nil
-        },
-        'baz-1.3' => {
-          'license' => 'BSD',
-          'license_url' => nil,
-          'project_url' => nil
-        }
+        'foo-1.2' => { 'license' => 'MIT' },
+        'baz-1.3' => { 'license' => 'BSD' }
       }
     })
-    Papers::Gem.stub(:introspected).and_return(['foo-1.2', 'baz-1.2'])
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.2', licenses: ['BSD'])
+    ])
 
     expect(validator.valid?).to be_false
 
@@ -73,23 +63,42 @@ describe 'Papers' do
     validator.valid?
   end
 
+  it 'detects omitted gem versions' do
+    Papers::Configuration.any_instance.stub(:validate_javascript?).and_return(false)
+
+    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+      'javascripts' => {},
+      'gems' => {
+        'foo' => { 'license' => 'MIT' },
+        'baz-1.2' => { 'license' => 'BSD' }
+      }
+    })
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.2', licenses: ['BSD'])
+    ])
+
+    expect(validator).not_to be_valid
+
+    expect(validator.errors).to eq([
+      'foo-1.2 is included in the application, but not in the manifest',
+      'foo is included in the manifest, but not in the application'
+    ])
+    validator.valid?
+  end
+
   it 'is OK with matching gem sets' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
-        'foo-1.2' => {
-          'license' => 'MIT',
-          'license_url' => nil,
-          'project_url' => nil
-        },
-        'baz-1.3' => {
-          'license' => 'BSD',
-          'license_url' => nil,
-          'project_url' => nil
-        }
-      },
+        'foo-1.2' => { 'license' => 'MIT' },
+        'baz-1.2' => { 'license' => 'BSD' }
+      }
     })
-    Papers::Gem.stub(:introspected).and_return(['foo-1.2', 'baz-1.3'])
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.2', licenses: ['BSD'])
+    ])
 
     expect(validator.valid?).to be_true
   end
@@ -98,48 +107,29 @@ describe 'Papers' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
-        'foo-1.2' => {
-          'license' => 'MIT',
-          'license_url' => nil,
-          'project_url' => nil
-        },
-        'baz-1.3' => {
-          'license' => 'GPL',
-          'license_url' => nil,
-          'project_url' => nil
-        }
-      },
+        'foo-1.2' => { 'license' => 'MIT' },
+        'baz-1.3' => { 'license' => 'GPL' }
+      }
     })
-    Papers::Gem.stub(:introspected).and_return(['foo-1.2', 'baz-1.3'])
+    Bundler.stub_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['MIT']),
+      double(name: 'baz', version: '1.3', licenses: ['GPL'])
+    ])
 
-    expect(validator.valid?).to be_false
+    expect(validator).not_to be_valid
 
     expect(validator.errors).to eq([
       'baz-1.3 is licensed under GPL, which is not whitelisted'
     ])
-
-    validator.valid?
   end
 
   it 'displays gem licenses in a pretty format without versions' do
     Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
-        'foo-1.2' => {
-          'license' => 'MIT',
-          'license_url' => nil,
-          'project_url' => nil
-        },
-        'baz-1.3' => {
-          'license' => 'BSD',
-          'license_url' => nil,
-          'project_url' => nil
-        },
-        'with-hyphens-1.4' => {
-          'license' => 'MIT',
-          'license_url' => nil,
-          'project_url' => nil
-        }
+        'foo-1.2'          => { 'license' => 'MIT' },
+        'baz-1.3'          => { 'license' => 'BSD' },
+        'with-hyphens-1.4' => { 'license' => 'MIT' }
       },
     })
 
