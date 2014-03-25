@@ -14,7 +14,7 @@ module Papers
 
     def initialize
       @license_whitelist = [
-        'Public domain'
+        'Public domain',
         'MIT',
         'BSD',
         'Apache 2.0',
@@ -23,7 +23,7 @@ module Papers
         'LGPLv3',
         'Ruby',
         'Manually reviewed',
-        'Unlicensed'
+        'Unlicensed',
       ]
 
       @version_whitelisted_license = nil
