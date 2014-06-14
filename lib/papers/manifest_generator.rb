@@ -40,7 +40,8 @@ module Papers
       manifest = {
         "gems"             => get_installed_gems,
         "javascripts"      => get_installed_javascripts,
-        "bower_components" => get_installed_bower_components
+        "bower_components" => get_installed_bower_components,
+        "npm_packages" => get_npm_packages
       }
       return manifest
     end
@@ -89,6 +90,17 @@ module Papers
         }
       end
       components.empty? ? nil : components
+    end
+
+    def get_npm_packages
+      packages = {}
+      NpmPackage.full_introspected_entries.each do |entry|
+        packages[entry['name']] = {
+          'license' => 'Unknown',
+          'license_url' => nil,
+          'project_url' => nil
+        }
+      end
     end
 
     def manifest_exists?

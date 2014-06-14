@@ -8,9 +8,11 @@ module Papers
     attr_accessor :validate_gems
     attr_accessor :validate_javascript
     attr_accessor :validate_bower_components
+    attr_accessor :validate_npm_packages
 
     attr_accessor :javascript_paths
     attr_accessor :bower_components_path
+    attr_accessor :npm_package_json_path
 
     def initialize
       @license_whitelist = [
@@ -32,6 +34,8 @@ module Papers
       @validate_gems             = true
       @validate_javascript       = true
       @validate_bower_components = false
+      @validate_npm_packages = false
+
 
       @javascript_paths = [
         File.join(Dir.pwd, 'app',    'assets', 'javascripts'),
@@ -40,6 +44,8 @@ module Papers
       ]
 
       @bower_components_path = File.join(Dir.pwd, 'vendor', 'assets', 'components')
+
+      @npm_package_json_path = File.join(Dir.pwd, 'package.json')
     end
 
     def validate_gems?
@@ -53,5 +59,10 @@ module Papers
     def validate_bower_components?
       !!@validate_bower_components
     end
+
+    def validate_npm_packages?
+      !!@validate_npm_packages
+    end
+
   end
 end
