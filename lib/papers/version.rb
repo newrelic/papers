@@ -1,8 +1,14 @@
 module Papers
-  MAJOR = 1
-  MINOR = 2
-  PATCH = 0
+  class Version
+    MAJOR = 1
+    MINOR = 3
+    PATCH = 0
 
-  VERSION = [MAJOR, MINOR, PATCH].join('.')
+    def self.to_s
+      [MAJOR, MINOR, PATCH].join('.')
+    end
+  end
+
+  VERSION = Version.to_s
 end
 
