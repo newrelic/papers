@@ -26,17 +26,15 @@ module Papers
       }
     end
 
-    def self.package
-      begin
-        pkg = File.read(Papers.config.npm_package_json_path)
-        JSON.parse(pkg)
-      rescue
-        {}
-      end
-    end
-
     def self.manifest_key
       "npm_packages"
+    end
+
+    private
+
+    def self.package
+      pkg = File.read(Papers.config.npm_package_json_path)
+      JSON.parse(pkg)
     end
   end
 end

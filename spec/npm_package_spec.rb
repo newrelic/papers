@@ -4,6 +4,24 @@ require_relative '../lib/papers'
 
 describe 'NpmPackageSpecification' do
   describe '#full_introspected_entries' do
+    it 'reads dependencies from the specified file' do
+      Papers::Configuration.any_instance.stub(:npm_package_json_path).and_return('spec/support/package.json')
+
+      expect(Papers::NpmPackage.full_introspected_entries).to eq([
+        {"name"=>"prod_dependency", "version"=>"3.2.0"},
+        {"name"=>"dev_dependency", "version"=>"1.2.3"}
+      ])
+    end
+
+    it "raises an error when package.json is not found" do
+      expect { Papers::NpmPackage.full_introspected_entries }.to raise_error Errno::ENOENT
+    end
+
+    it "raises an error when package.json does not parse properly" do
+      Papers::Configuration.any_instance.stub(:npm_package_json_path).and_return('spec/support/package_with_error.json')
+      expect { Papers::NpmPackage.full_introspected_entries }.to raise_error JSON::ParserError
+    end
+
     it 'combines dependencies and devDependencies' do
       Papers::NpmPackage.stub(:package)
                     .and_return({'dependencies' => {'prod_package' => '~> 1.2.3'},
@@ -11,14 +29,8 @@ describe 'NpmPackageSpecification' do
 
 
       expect(Papers::NpmPackage.full_introspected_entries).to eq([
-        {
-          'name' => 'prod_package',
-          'version' => '1.2.3'
-        },
-        {
-          'name' => 'dev_package',
-          'version' => '1.2.0'
-        }
+        { 'name' => 'prod_package', 'version' => '1.2.3' },
+        { 'name' => 'dev_package', 'version' => '1.2.0' }
       ])
     end
 
