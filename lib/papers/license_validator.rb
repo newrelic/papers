@@ -4,6 +4,7 @@ require 'papers/dependency_specification'
 require 'papers/dependency_specification/gem'
 require 'papers/dependency_specification/javascript'
 require 'papers/dependency_specification/bower_component'
+require 'papers/dependency_specification/npm_package'
 
 module Papers
   class LicenseValidator
@@ -19,6 +20,7 @@ module Papers
       validate_spec_type(Gem)            if Papers.config.validate_gems?
       validate_spec_type(Javascript)     if Papers.config.validate_javascript?
       validate_spec_type(BowerComponent) if Papers.config.validate_bower_components?
+      validate_spec_type(NpmPackage)  if Papers.config.validate_npm_packages?
 
       @errors.empty?
     end
@@ -37,6 +39,10 @@ module Papers
 
     def pretty_bower_component_list
       BowerComponent.all_from_manifest(manifest).map(&:pretty_hash)
+    end
+
+    def pretty_npm_package_list
+      NpmPackage.all_from_manifest(manifest).map(&:pretty_hash)
     end
 
     private

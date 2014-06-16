@@ -256,6 +256,53 @@ describe 'Papers' do
     ])
   end
 
+  it 'displays npm package licenses in a pretty format without versions' do
+    Papers::Configuration.any_instance.stub(:validate_npm_packages?).and_return(true)
+
+    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+      'javascripts' => {},
+      'gems' => {},
+      'npm_packages' => {
+        'foo-1.2' => {
+          'license' => 'MIT',
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        'baz-1.3' => {
+          'license' => 'BSD',
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        'with-hyphens-1.4' => {
+          'license' => 'MIT',
+          'license_url' => nil,
+          'project_url' => nil
+        }
+      },
+    })
+
+    expect(validator.pretty_npm_package_list).to eq([
+      {
+        name: 'baz',
+        license: 'BSD',
+        license_url: nil,
+        project_url: nil
+      },
+      {
+        name: 'foo',
+        license: 'MIT',
+        license_url: nil,
+        project_url: nil
+      },
+      {
+        name: 'with-hyphens',
+        license: 'MIT',
+        license_url: nil,
+        project_url: nil
+      }
+    ])
+  end
+
   it 'displays the gem name when the gemspec does not specify a version' do
     gemspec = Papers::Gem.new(name: 'foo')
     expect('foo').to eq(gemspec.name_without_version)

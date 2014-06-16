@@ -92,6 +92,13 @@ Papers.configure do |config|
   # Configures where Papers should look for bower components. Each component
   # must have a .bower.json file in its directory for Papers to see it.
   # config.bower_components_path = 'vendor/assets/components'
+
+  # Configures Papers to validate licenses for NPM dependencies. Defaults to false.
+  config.validate_npm_packages = false
+
+  # Configures where Papers should look for the package.json file. Defaults to:
+  # package.json in the root directory of the project
+  config.npm_package_json_path = File.join(Dir.pwd, 'package.json')
 end
 ```
 
