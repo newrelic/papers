@@ -1,5 +1,4 @@
-# Papers [![Build
-Status](https://travis-ci.org/newrelic/papers.svg?branch=master)](https://travis-ci.org/newrelic/papers)
+# Papers [![Build Status](https://travis-ci.org/newrelic/papers.svg?branch=master)](https://travis-ci.org/newrelic/papers)
 
 > "Papers, please."
 
