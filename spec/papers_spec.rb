@@ -13,7 +13,7 @@ describe 'Papers' do
     })
     Papers::Gem.stub(:introspected).and_return([])
 
-    expect(validator.valid?).to be_true
+    expect(validator.valid?).to be_truthy
   end
 
   it 'detects mismatched gems' do
@@ -29,7 +29,7 @@ describe 'Papers' do
       double(name: 'baz', version: '1.3', licenses: ['BSD'])
     ])
 
-    expect(validator.valid?).to be_false
+    expect(validator.valid?).to be_falsey
 
     expect(validator.errors).to eq([
       'bar-1.2 is included in the application, but not in the manifest',
@@ -54,7 +54,7 @@ describe 'Papers' do
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
 
-    expect(validator.valid?).to be_false
+    expect(validator.valid?).to be_falsey
 
     expect(validator.errors).to eq([
       'baz-1.2 is included in the application, but not in the manifest',
@@ -100,7 +100,7 @@ describe 'Papers' do
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
 
-    expect(validator.valid?).to be_true
+    expect(validator.valid?).to be_truthy
   end
 
   it 'is OK with whitelisting gem versions on a specific license' do
