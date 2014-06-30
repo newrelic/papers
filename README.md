@@ -78,10 +78,10 @@ Papers.configure do |config|
   # Configures Papers to validate licenses for bundled gems. Defaults to true.
   config.validate_gems = true
 
-  # Configures Papers to validate licenses for included JavaScript files. Defaults to true.
+  # Configures Papers to validate licenses for included JavaScript and CoffeScript files. Defaults to true.
   config.validate_javascript = true
 
-  # A list of paths where you have included JavaScript files. Defaults to:
+  # A list of paths where you have included JavaScript and CoffeeScript files. Defaults to:
   #
   # %w[app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts]
   config.javascript_paths << File.join('public', 'javascripts')
