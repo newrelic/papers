@@ -35,6 +35,8 @@ module Papers
     def self.package
       pkg = File.read(Papers.config.npm_package_json_path)
       JSON.parse(pkg)
+    rescue Errno::ENOENT
+      {}
     end
   end
 end
