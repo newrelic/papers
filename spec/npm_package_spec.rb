@@ -13,8 +13,8 @@ describe 'NpmPackageSpecification' do
       ])
     end
 
-    it "raises an error when package.json is not found" do
-      expect { Papers::NpmPackage.full_introspected_entries }.to raise_error Errno::ENOENT
+    it "returns an empty list if package.json is not found" do
+      expect(Papers::NpmPackage.full_introspected_entries).to eq([])
     end
 
     it "raises an error when package.json does not parse properly" do
