@@ -11,6 +11,7 @@ module Papers
     attr_accessor :validate_npm_packages
 
     attr_accessor :javascript_paths
+    attr_accessor :whitelist_javascript_paths
     attr_accessor :bower_components_path
     attr_accessor :npm_package_json_path
 
@@ -42,6 +43,7 @@ module Papers
         File.join(Dir.pwd, 'lib',    'assets', 'javascripts'),
         File.join(Dir.pwd, 'vendor', 'assets', 'javascripts')
       ]
+      @whitelist_javascript_paths = []
 
       @bower_components_path = File.join(Dir.pwd, 'vendor', 'assets', 'components')
 
