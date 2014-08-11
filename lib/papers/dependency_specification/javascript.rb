@@ -17,17 +17,8 @@ module Papers
       root_regexp = /^#{Regexp.escape Dir.pwd.to_s}\//
       files = dirs.map { |dir| Dir.glob("#{dir}/**/*.{js,coffee}") }.flatten.map do |name|
         name = name.sub(root_regexp, '')
-
-        unless whitelist_dirs.empty?
-          should_exclude = whitelist_dirs.any? do |whitelist_dir|
-            name.start_with?(whitelist_dir)
-          end
-          name unless should_exclude
-        else
-          name
-        end
+        name unless whitelist_dirs.any? { |dir| name.start_with?(dir) }
       end
-
       files.compact
     end
 
