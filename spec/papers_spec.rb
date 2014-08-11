@@ -307,4 +307,33 @@ describe 'Papers' do
     gemspec = Papers::Gem.new(name: 'foo')
     expect('foo').to eq(gemspec.name_without_version)
   end
+
+  it 'is OK with whitelisting javascript javascript_paths' do
+    # contents of javascript dir and no gems
+    Dir.stub(:glob){[
+      'app/javascripts/node_modules/should_be_whitelisted.js',
+      'app/javascripts/test.js'
+    ]}
+    Papers::Gem.stub(:introspected).and_return([])
+
+    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+      'javascripts' => {
+        'app/javascripts/test.js' => {
+          'license' => 'MIT',
+          'license_url' => nil,
+          'project_url' => nil
+        }
+      },
+      'gems' => {}
+    })
+    Papers::Configuration.any_instance.stub(:javascript_paths).and_return(['app/javascripts/'])
+
+    # whitelist this directory
+    Papers::Configuration.any_instance.stub(:whitelist_javascript_paths).and_return(['app/javascripts/node_modules'])
+
+    expect(Papers::Javascript.introspected).to_not include('app/javascripts/node_modules/should_be_whitelisted.js')
+    expect(validator).to be_valid
+  end
+
+
 end
