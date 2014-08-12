@@ -86,6 +86,12 @@ Papers.configure do |config|
   # %w[app/assets/javascripts lib/assets/javascripts vendor/assets/javascripts]
   config.javascript_paths << File.join('public', 'javascripts')
 
+  # A list of paths to exclude from JavaScript/CoffeeScript license validation.
+  # This is useful if you have subdirectories that include build dependencies
+  # that won't get shipped to your production environment.
+  #
+  # config.whitelist_javascript_paths << File.join('public', 'javascripts', 'node_modules')
+
   # Configures Papers to validate licenses for bower components. Defaults to false.
   config.validate_bower_components = false
 
