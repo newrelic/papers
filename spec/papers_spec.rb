@@ -256,6 +256,35 @@ describe 'Papers' do
     ])
   end
 
+  it 'skips bower versions for whitelisted licenses' do
+    Papers::Configuration.any_instance.stub(:version_whitelisted_license).and_return('Whitelist')
+
+    Papers::BowerComponent.stub(:bower_json_entries).and_return([
+      {
+        'name' => 'foo',
+        '_release' => '1.2',
+        'license' => 'MIT',
+      },
+      {
+        'name' => 'baz',
+        '_release' => '1.3',
+        'license' => 'BSD',
+      },
+      {
+        'name' => 'internal-thing',
+        '_release' => '1.5',
+        'license' => 'Whitelist',
+      },
+    ])
+
+    names = Papers::BowerComponent.introspected
+    expect(names).to eq([
+      'foo-1.2',
+      'baz-1.3',
+      'internal-thing'
+    ])
+  end
+
   it 'displays npm package licenses in a pretty format without versions' do
     Papers::Configuration.any_instance.stub(:validate_npm_packages?).and_return(true)
 

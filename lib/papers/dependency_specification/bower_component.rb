@@ -16,9 +16,16 @@ module Papers
     end
 
     def self.full_introspected_entries
+      whitelisted_license = Papers.config.version_whitelisted_license
       bower_json_entries.map do |entry|
+        name =
+          if whitelisted_license != nil && whitelisted_license == entry['license']
+            entry['name']
+          else
+            "#{entry['name']}-#{entry['_release']}"
+          end
         {
-          'name' => "#{entry['name']}-#{entry['_release']}",
+          'name' => name,
           'homepage' => entry['homepage']
         }
       end

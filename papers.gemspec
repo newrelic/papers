@@ -28,5 +28,5 @@ caught flat-footed by the GPL.
 
   # dependencies
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 2.14'
+  s.add_development_dependency 'rspec', '~> 3.1.0'
 end
