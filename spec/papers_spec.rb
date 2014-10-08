@@ -7,24 +7,25 @@ describe 'Papers' do
   let(:validator) { Papers::LicenseValidator.new }
 
   it 'validates a manifest with empty values and set of dependencies' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {}
     })
-    Papers::Gem.stub(:introspected).and_return([])
+    allow(Papers::Gem).to receive(:introspected).and_return([])
 
     expect(validator.valid?).to be_truthy
   end
 
   it 'detects mismatched gems' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo-1.2' => { 'license' => 'MIT' },
         'baz-1.3' => { 'license' => 'BSD' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'bar', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.3', licenses: ['BSD'])
     ])
@@ -40,16 +41,15 @@ describe 'Papers' do
   end
 
   it 'detects mismatched gem versions' do
-    Papers::Configuration.any_instance.stub(:validate_javascript?).and_return(false)
-
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::Configuration).to receive(:validate_javascript?).and_return(false)
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo-1.2' => { 'license' => 'MIT' },
         'baz-1.3' => { 'license' => 'BSD' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'foo', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
@@ -64,16 +64,15 @@ describe 'Papers' do
   end
 
   it 'detects omitted gem versions' do
-    Papers::Configuration.any_instance.stub(:validate_javascript?).and_return(false)
-
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::Configuration).to receive(:validate_javascript?).and_return(false)
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo' => { 'license' => 'MIT' },
         'baz-1.2' => { 'license' => 'BSD' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'foo', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
@@ -88,14 +87,14 @@ describe 'Papers' do
   end
 
   it 'is OK with matching gem sets' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo-1.2' => { 'license' => 'MIT' },
         'baz-1.2' => { 'license' => 'BSD' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'foo', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
@@ -104,18 +103,18 @@ describe 'Papers' do
   end
 
   it 'is OK with whitelisting gem versions on a specific license' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo' => { 'license' => 'MIT' },
         'baz' => { 'license' => 'BSD' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'foo', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.2', licenses: ['BSD'])
     ])
-    Papers::Configuration.any_instance.stub(:version_whitelisted_license).and_return('MIT')
+    allow_any_instance_of(Papers::Configuration).to receive(:version_whitelisted_license).and_return('MIT')
 
     expect(validator).not_to be_valid
     expect(validator.errors).to eq([
@@ -125,14 +124,14 @@ describe 'Papers' do
   end
 
   it 'is OK with matching gem sets but complain about a license issue' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo-1.2' => { 'license' => 'MIT' },
         'baz-1.3' => { 'license' => 'GPL' }
       }
     })
-    Bundler.stub_chain(:load, :specs).and_return([
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
       double(name: 'foo', version: '1.2', licenses: ['MIT']),
       double(name: 'baz', version: '1.3', licenses: ['GPL'])
     ])
@@ -145,7 +144,7 @@ describe 'Papers' do
   end
 
   it 'displays gem licenses in a pretty format without versions' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {
         'foo-1.2'          => { 'license' => 'MIT' },
@@ -177,7 +176,7 @@ describe 'Papers' do
   end
 
   it 'displays JS libraries in a pretty format without versions' do
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {
         '/path/to/foo.js' => {
           'license' => 'MIT',
@@ -211,18 +210,30 @@ describe 'Papers' do
         :project_url => nil
       },
       {
-        :name =>'/path/to/newrelic.js',
+        :name =>'/path/to/bar.coffee',
+        :license =>'MIT',
+        :license_url => nil,
+        :project_url => nil
+      },
+      {
+        :name =>'/path/to/newrelic.js.erb',
+        :license =>'New Relic',
+        :license_url => nil,
+        :project_url => nil
+      },
+      {
+        :name =>'/path/to/newrelic.js.coffee',
         :license =>'New Relic',
         :license_url => nil,
         :project_url => nil
       }
-    ])
+    )
   end
 
   it 'displays bower component licenses in a pretty format without versions' do
-    Papers::Configuration.any_instance.stub(:validate_bower_components?).and_return(true)
+    allow_any_instance_of(Papers::Configuration).to receive(:validate_bower_components?).and_return(true)
 
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {},
       'bower_components' => {
@@ -267,9 +278,9 @@ describe 'Papers' do
   end
 
   it 'skips bower versions for whitelisted licenses' do
-    Papers::Configuration.any_instance.stub(:version_whitelisted_license).and_return('Whitelist')
+    allow_any_instance_of(Papers::Configuration).to receive(:version_whitelisted_license).and_return('Whitelist')
 
-    Papers::BowerComponent.stub(:bower_json_entries).and_return([
+    allow(Papers::BowerComponent).to receive(:bower_json_entries).and_return([
       {
         'name' => 'foo',
         '_release' => '1.2',
@@ -296,9 +307,9 @@ describe 'Papers' do
   end
 
   it 'displays npm package licenses in a pretty format without versions' do
-    Papers::Configuration.any_instance.stub(:validate_npm_packages?).and_return(true)
+    allow_any_instance_of(Papers::Configuration).to receive(:validate_npm_packages?).and_return(true)
 
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
       'gems' => {},
       'npm_packages' => {
@@ -349,13 +360,14 @@ describe 'Papers' do
 
   it 'is OK with whitelisting javascript javascript_paths' do
     # contents of javascript dir and no gems
-    Dir.stub(:glob){[
+    allow(Dir).to receive(:glob).and_return([
       'app/javascripts/node_modules/should_be_whitelisted.js',
       'app/javascripts/test.js'
-    ]}
-    Papers::Gem.stub(:introspected).and_return([])
+    ])
 
-    Papers::LicenseValidator.any_instance.stub(:manifest).and_return({
+    allow(Papers::Gem).to receive(:introspected).and_return([])
+
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {
         'app/javascripts/test.js' => {
           'license' => 'MIT',
@@ -365,10 +377,10 @@ describe 'Papers' do
       },
       'gems' => {}
     })
-    Papers::Configuration.any_instance.stub(:javascript_paths).and_return(['app/javascripts/'])
+    allow_any_instance_of(Papers::Configuration).to receive(:javascript_paths).and_return(['app/javascripts/'])
 
     # whitelist this directory
-    Papers::Configuration.any_instance.stub(:whitelist_javascript_paths).and_return(['app/javascripts/node_modules'])
+    allow_any_instance_of(Papers::Configuration).to receive(:whitelist_javascript_paths).and_return(['app/javascripts/node_modules'])
 
     expect(Papers::Javascript.introspected).to_not include('app/javascripts/node_modules/should_be_whitelisted.js')
     expect(validator).to be_valid
