@@ -184,7 +184,17 @@ describe 'Papers' do
           'license_url' => nil,
           'project_url' => nil
         },
-        '/path/to/newrelic.js' => {
+        '/path/to/bar.coffee' => {
+          'license' => 'MIT',
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        '/path/to/newrelic.js.erb' => {
+          'license' => 'New Relic',
+          'license_url' => nil,
+          'project_url' => nil
+        },
+        '/path/to/newrelic.js.coffee' => {
           'license' => 'New Relic',
           'license_url' => nil,
           'project_url' => nil
@@ -193,7 +203,7 @@ describe 'Papers' do
       'gems' => {}
     })
 
-    expect(validator.pretty_js_list).to eq([
+    expect(validator.pretty_js_list).to contain_exactly(
       {
         :name =>'/path/to/foo.js',
         :license =>'MIT',

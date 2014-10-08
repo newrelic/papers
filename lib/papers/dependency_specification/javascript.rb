@@ -15,7 +15,7 @@ module Papers
 
       # TODO: add logic for determining rails. Is Rails.root better than Dir.pwd for such a case?
       root_regexp = /^#{Regexp.escape Dir.pwd.to_s}\//
-      files = dirs.map { |dir| Dir.glob("#{dir}/**/*.{js,coffee}") }.flatten.map do |name|
+      files = dirs.map { |dir| Dir.glob("#{dir}/**/*.{js,js.erb,coffee,coffee.erb}") }.flatten.map do |name|
         name = name.sub(root_regexp, '')
         name unless whitelist_dirs.any? { |dir| name.start_with?(dir) }
       end
