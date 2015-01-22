@@ -1,6 +1,10 @@
 # Changelog
 
-## 2.0.0 (current release)
+## 2.0.1 (current release)
+
+* Correct validation of js.erb and coffee.erb files.
+
+## 2.0.0
 
 * Make the `version_whitelisted_license` option to apply to Bower components.
   This is a breaking change since current manifests with whitelisted licenses
