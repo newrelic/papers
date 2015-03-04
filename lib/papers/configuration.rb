@@ -25,7 +25,8 @@ module Papers
         'LGPLv3',
         'Ruby',
         'Manually Reviewed',
-        'Unlicensed'
+        'Unlicensed',
+        'ISC'
       ]
 
       @version_whitelisted_license = nil
