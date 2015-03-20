@@ -65,7 +65,7 @@ module Papers
           # TODO: add support for multiple licenses? some gemspecs have dual licensing
         }
       end
-      return gems
+      return Hash[gems.sort]
     end
 
     def get_installed_javascripts
