@@ -33,8 +33,8 @@ describe 'Papers' do
     expect(validator.valid?).to be_falsey
 
     expect(validator.errors).to eq([
-      'bar-1.2 is included in the application, but not in the manifest',
-      'foo-1.2 is included in the manifest, but not in the application'
+      'Gem bar-1.2 is included in the application, but not in the manifest',
+      'Gem foo-1.2 is included in the manifest, but not in the application'
     ])
 
     validator.valid?
@@ -57,8 +57,8 @@ describe 'Papers' do
     expect(validator.valid?).to be_falsey
 
     expect(validator.errors).to eq([
-      'baz-1.2 is included in the application, but not in the manifest',
-      'baz-1.3 is included in the manifest, but not in the application'
+      'Gem baz-1.2 is included in the application, but not in the manifest',
+      'Gem baz-1.3 is included in the manifest, but not in the application'
     ])
     validator.valid?
   end
@@ -80,8 +80,8 @@ describe 'Papers' do
     expect(validator).not_to be_valid
 
     expect(validator.errors).to eq([
-      'foo-1.2 is included in the application, but not in the manifest',
-      'foo is included in the manifest, but not in the application'
+      'Gem foo-1.2 is included in the application, but not in the manifest',
+      'Gem foo is included in the manifest, but not in the application'
     ])
     validator.valid?
   end
@@ -118,8 +118,8 @@ describe 'Papers' do
 
     expect(validator).not_to be_valid
     expect(validator.errors).to eq([
-      'baz-1.2 is included in the application, but not in the manifest',
-      'baz is included in the manifest, but not in the application'
+      'Gem baz-1.2 is included in the application, but not in the manifest',
+      'Gem baz is included in the manifest, but not in the application'
     ])
   end
 
@@ -139,7 +139,7 @@ describe 'Papers' do
     expect(validator).not_to be_valid
 
     expect(validator.errors).to eq([
-      'baz-1.3 is licensed under GPL, which is not whitelisted'
+      'Gem baz-1.3 is licensed under GPL, which is not whitelisted'
     ])
   end
 

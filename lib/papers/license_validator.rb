@@ -20,7 +20,7 @@ module Papers
       validate_spec_type(Gem)            if Papers.config.validate_gems?
       validate_spec_type(Javascript)     if Papers.config.validate_javascript?
       validate_spec_type(BowerComponent) if Papers.config.validate_bower_components?
-      validate_spec_type(NpmPackage)  if Papers.config.validate_npm_packages?
+      validate_spec_type(NpmPackage)     if Papers.config.validate_npm_packages?
 
       @errors.empty?
     end
@@ -48,17 +48,18 @@ module Papers
     private
 
       def validate_spec_type(spec_type)
+        asset_type_name = spec_type.asset_type_name
         spec_type.missing_from_manifest(manifest).each do |name|
-          errors << "#{name} is included in the application, but not in the manifest"
+          errors << "#{asset_type_name} #{name} is included in the application, but not in the manifest"
         end
 
         spec_type.unknown_in_manifest(manifest).each do |name|
-          errors << "#{name} is included in the manifest, but not in the application"
+          errors << "#{asset_type_name} #{name} is included in the manifest, but not in the application"
         end
 
         spec_type.all_from_manifest(manifest).each do |spec|
           unless spec.acceptable_license?
-            errors << "#{spec.name} is licensed under #{spec.license}, which is not whitelisted"
+            errors << "#{asset_type_name} #{spec.name} is licensed under #{spec.license}, which is not whitelisted"
           end
         end
       end
