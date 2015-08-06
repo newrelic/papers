@@ -175,6 +175,35 @@ describe 'Papers' do
     ])
   end
 
+  it 'displays npm package name correctly when it ends in a hyphen' do
+    # package names rarely (if ever) end in a hyphen, but the names returned by manifest end with a
+    # hyphen if the version is determined to be blank, which happens when there are no digits in the
+    # version string (due to, e.g., a git URL without a hash in it). See
+    # NpmPackage.full_introspected_entries.
+    allow_any_instance_of(Papers::Configuration).to receive(:validate_npm_packages?).and_return(true)
+
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
+      'javascripts' => {},
+      'gems' => {},
+      'npm_packages' => {
+        'foo-' => {
+          'license' => 'MIT',
+          'license_url' => nil,
+          'project_url' => nil
+        }
+      }
+    })
+
+    expect(validator.pretty_npm_package_list).to eq([
+      {
+        name: 'foo',
+        license: 'MIT',
+        license_url: nil,
+        project_url: nil
+      }
+    ])
+  end
+
   it 'displays JS libraries in a pretty format without versions' do
     allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {
