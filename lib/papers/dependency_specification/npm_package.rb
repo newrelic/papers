@@ -26,6 +26,10 @@ module Papers
       }
     end
 
+    def self.asset_type_name
+      'npm package'
+    end
+
     def self.manifest_key
       "npm_packages"
     end

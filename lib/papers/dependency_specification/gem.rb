@@ -22,6 +22,10 @@ module Papers
       end
     end
 
+    def self.asset_type_name
+      'Gem'
+    end
+
     def self.manifest_key
       "gems"
     end

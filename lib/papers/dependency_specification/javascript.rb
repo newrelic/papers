@@ -22,6 +22,10 @@ module Papers
       files.compact
     end
 
+    def self.asset_type_name
+      'JavaScript file'
+    end
+
     def self.manifest_key
       "javascripts"
     end
