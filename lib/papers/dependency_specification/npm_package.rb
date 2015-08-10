@@ -9,6 +9,8 @@ module Papers
     def self.full_introspected_entries
       packages = (package['dependencies'] || {}).merge((package['devDependencies'] || {}))
       packages.map do |name, version|
+        # FIXME: This version cleanup is inadequate for npm version specifiers, which may be git or
+        # tarball URLs.
         version.sub!(/^\D+/, '')
         {
           'name' => name,

@@ -1,6 +1,16 @@
 # Changelog
 
-## 2.0.1 (current release)
+## 2.2.0
+
+* Fix empty npm package name bug. The name of an npm package would be blank when its version was,
+  e.g., a git url with no digits anywhere.
+* Include package type (Gem, npm package, etc.) in error messages.
+
+## 2.1.0
+
+* Add ISC license to default whitelist
+
+## 2.0.1
 
 * Correct validation of js.erb and coffee.erb files.
 

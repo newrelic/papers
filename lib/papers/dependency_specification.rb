@@ -11,7 +11,7 @@ module Papers
 
     def name_without_version
       return @name unless @name.include?('-')
-      @name.split('-')[0..-2].join('-')
+      @name.rpartition('-')[0]
     end
 
     def acceptable_license?
