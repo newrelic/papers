@@ -102,6 +102,9 @@ Papers.configure do |config|
   # Configures Papers to validate licenses for NPM dependencies. Defaults to false.
   config.validate_npm_packages = false
 
+  # Configured Papers to ignore NPM dev dependencies. Defaults to false.
+  config.ignore_npm_dev_dependencies = false
+
   # Configures where Papers should look for the package.json file. Defaults to:
   # package.json in the root directory of the project
   config.npm_package_json_path = File.join(Dir.pwd, 'package.json')
