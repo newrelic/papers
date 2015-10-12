@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.0
+* Add `config.ignore_npm_dev_dependencies` option to not apply validation to npm devDepdency modules. This is useful if you don't need to consider packages that aren't use in production.
+
 ## 2.2.0
 
 * Fix empty npm package name bug. The name of an npm package would be blank when its version was,

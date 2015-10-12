@@ -9,6 +9,7 @@ module Papers
     attr_accessor :validate_javascript
     attr_accessor :validate_bower_components
     attr_accessor :validate_npm_packages
+    attr_accessor :ignore_npm_dev_dependencies
 
     attr_accessor :javascript_paths
     attr_accessor :whitelist_javascript_paths
@@ -37,7 +38,7 @@ module Papers
       @validate_javascript       = true
       @validate_bower_components = false
       @validate_npm_packages = false
-
+      @ignore_npm_dev_dependencies = false
 
       @javascript_paths = [
         File.join(Dir.pwd, 'app',    'assets', 'javascripts'),
@@ -65,6 +66,10 @@ module Papers
 
     def validate_npm_packages?
       !!@validate_npm_packages
+    end
+
+    def ignore_npm_dev_dependencies?
+      !!@ignore_npm_dev_dependencies
     end
 
   end

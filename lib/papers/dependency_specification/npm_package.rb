@@ -7,7 +7,8 @@ module Papers
     end
 
     def self.full_introspected_entries
-      packages = (package['dependencies'] || {}).merge((package['devDependencies'] || {}))
+      packages = (package['dependencies'] || {})
+      packages.merge!((package['devDependencies'] || {})) unless Papers.config.ignore_npm_dev_dependencies
       packages.map do |name, version|
         # FIXME: This version cleanup is inadequate for npm version specifiers, which may be git or
         # tarball URLs.

@@ -22,16 +22,25 @@ describe 'NpmPackageSpecification' do
       expect { Papers::NpmPackage.full_introspected_entries }.to raise_error JSON::ParserError
     end
 
-    it 'combines dependencies and devDependencies' do
+    it 'combines dependencies and devDependencies by default' do
       allow(Papers::NpmPackage).to receive(:package).and_return({
         'dependencies'    => { 'prod_package' => '~> 1.2.3' },
         'devDependencies' => {'dev_package' => '~> 1.2.0'}
       })
-
-
       expect(Papers::NpmPackage.full_introspected_entries).to eq([
         { 'name' => 'prod_package', 'version' => '1.2.3' },
         { 'name' => 'dev_package', 'version' => '1.2.0' }
+      ])
+    end
+
+    it 'does not combine dependencies and devDependencies when ignore_npm_dev_dependencies is true' do
+      allow(Papers::NpmPackage).to receive(:package).and_return({
+        'dependencies'    => { 'prod_package' => '~> 1.2.3' },
+        'devDependencies' => {'dev_package' => '~> 1.2.0'}
+      })
+      allow_any_instance_of(Papers::Configuration).to receive(:ignore_npm_dev_dependencies).and_return(true)
+      expect(Papers::NpmPackage.full_introspected_entries).to eq([
+        { 'name' => 'prod_package', 'version' => '1.2.3' }
       ])
     end
 
