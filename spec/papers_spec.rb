@@ -415,5 +415,22 @@ describe 'Papers' do
     expect(validator).to be_valid
   end
 
+  describe "Command Line" do
+    before do
+      @old_argv = ARGV
+    end
+    after do
+      ARGV = @old_argv
+    end
+  end
+  it "runs the papers command and prints out help" do
+
+    ARGV = %w[-h]
+    cli = Papers::CLI.new
+    expect(cli).to receive(:p).with(/^Usage: .*/)
+    cli.run
+
+  end
+
 
 end
