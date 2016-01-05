@@ -19,22 +19,18 @@ module Papers
 
     def parse_options
       options = {}
-      opts = OptionParser.new do |opts|
-        opts.banner = "Usage: papers [options]"
+      OptionParser.new do |opts|
+        opts.banner = 'Usage: papers [options]'
 
-        opts.on("-g", "--generate", "Generate papers_manifest.yml") do |v|
+        opts.on('-g', '--generate', 'Generate papers_manifest.yml') do |v|
           options[:generate] = v
         end
 
-        opts.on_tail( '-h', '--help', 'Display this screen' ) do |v|
-          p opts.to_s
-          return {}
+        opts.on_tail('-h', '--help', 'Display this screen') do
+          puts opts
         end
       end.parse!
-
-      p opts.to_s if options.empty?
-
-      return options
+      options
     end
   end
 end
