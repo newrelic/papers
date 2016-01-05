@@ -446,9 +446,10 @@ describe 'Papers' do
 
     ARGV = %w[-h]
     cli = Papers::CLI.new
-    expect(cli).to receive(:p).with(/^Usage: .*/)
+    expect(cli).to receive(:puts) do |opts|
+      expect(opts.to_s).to match /^Usage: papers.*/
+    end
     cli.run
-
   end
 
 
