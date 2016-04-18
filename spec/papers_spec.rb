@@ -415,5 +415,30 @@ describe 'Papers' do
     expect(validator).to be_valid
   end
 
+  describe "Command Line" do
+    def silently
+      vblevel = $VERBOSE 
+      $VERBOSE = nil
+      yield
+    ensure
+      $VERBOSE = vblevel
+    end
+    
+    before do
+      @old_argv = ARGV
+    end
+    after do
+      silently { ARGV = @old_argv }
+    end
+    it "runs the papers command and prints out help" do
+      silently { ARGV = %w[-h] }
+      cli = Papers::CLI.new
+      expect(cli).to receive(:puts) do |opts|
+        expect(opts.to_s).to match /^Usage: papers.*/
+      end
+      cli.run
+    end
+  end
+
 
 end
