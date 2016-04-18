@@ -435,21 +435,28 @@ describe 'Papers' do
   end
 
   describe "Command Line" do
+    def silently
+      vblevel = $VERBOSE 
+      $VERBOSE = nil
+      yield
+    ensure
+      $VERBOSE = vblevel
+    end
+    
     before do
       @old_argv = ARGV
     end
     after do
-      ARGV = @old_argv
+      silently { ARGV = @old_argv }
     end
-  end
-  it "runs the papers command and prints out help" do
-
-    ARGV = %w[-h]
-    cli = Papers::CLI.new
-    expect(cli).to receive(:puts) do |opts|
-      expect(opts.to_s).to match /^Usage: papers.*/
+    it "runs the papers command and prints out help" do
+      silently { ARGV = %w[-h] }
+      cli = Papers::CLI.new
+      expect(cli).to receive(:puts) do |opts|
+        expect(opts.to_s).to match /^Usage: papers.*/
+      end
+      cli.run
     end
-    cli.run
   end
 
 
