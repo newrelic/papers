@@ -50,7 +50,9 @@ module Papers
         manifest_gem["license"] = "License Change!"
       end
 
-      result_gems[gem_name_and_version(gemspec)] = manifest_gem
+      name = gem_name_and_version(gemspec)
+      name = gemspec.name if gemspec.name == manifest_gem_key
+      result_gems[name] = manifest_gem
     end
 
     def new_gem(result_gems, gemspec)

@@ -21,6 +21,10 @@ gems:
     license: MIT
     license_url: 
     project_url: https://github.com/rails/rails
+  newrelic_rpm:
+    license: New Relic
+    license_url: 
+    project_url: https://github.com/newrelic/rpm
 EOS
   }
 
@@ -42,7 +46,8 @@ EOS
 
   it "avoids unnecessary updates" do
     allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '4.2.0', license: "MIT")
+      double(name: 'rails', version: '4.2.0', license: "MIT"),
+      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
     ])
 
     expect(updater.update).to eq(original_content)
@@ -50,7 +55,8 @@ EOS
 
   it "updates version in place" do
     allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '4.2.7.1', license: "MIT")
+      double(name: 'rails', version: '4.2.7.1', license: "MIT"),
+      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
     ])
 
     expected = original_content.gsub(/rails-4.2.0/, "rails-4.2.7.1")
@@ -60,6 +66,7 @@ EOS
   it "adds new gems" do
     allow(updater).to receive(:gemspecs).and_return([
       double(name: 'rails', version: '4.2.0', license: "MIT"),
+      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic"),
       double(name: 'shoes', version: '4.0.0', license: "MIT", homepage: "http://shoesrb.com")
     ])
 
@@ -78,7 +85,8 @@ EOS
 
   it "warns on change to license" do
     allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '5.0.0', license: "NOT-MIT")
+      double(name: 'rails', version: '5.0.0', license: "NOT-MIT"),
+      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic"),
     ])
 
     expected = original_content.gsub(/rails-4.2.0/, "rails-5.0.0").
