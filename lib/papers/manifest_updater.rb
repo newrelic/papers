@@ -16,6 +16,8 @@ module Papers
       File.open(@manifest_path, 'w') do |file|
         file.write(updated_content)
       end
+
+      puts "Updated #{@manifest_path}! Run your tests and check your diffs!"
     end
 
     def update
@@ -47,7 +49,11 @@ module Papers
     def update_gem(result_gems, gemspec, manifest_gem_key)
       manifest_gem = result_gems.delete(manifest_gem_key)
       if gemspec.license != manifest_gem["license"]
-        manifest_gem["license"] = "License Change!"
+        new_licenses = gemspec.licenses || []
+        new_licenses << gemspec.license
+        new_licenses.uniq!
+
+        manifest_gem["license"] = "License Change! Was '#{manifest_gem["license"]}', is now #{new_licenses}"
       end
 
       name = gem_name_and_version(gemspec)

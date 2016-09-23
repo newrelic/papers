@@ -85,12 +85,12 @@ EOS
 
   it "warns on change to license" do
     allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '5.0.0', license: "NOT-MIT"),
-      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic"),
+      double(name: 'rails', version: '5.0.0', license: "NOT-MIT", licenses: ["NOT-MIT"]),
+      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic", licenses: ["New Relic"]),
     ])
 
     expected = original_content.gsub(/rails-4.2.0/, "rails-5.0.0").
-                                sub(/MIT/, "License Change!")
+                                sub(/MIT/, "License Change! Was 'MIT', is now [\"NOT-MIT\"]")
     expect(updater.update).to eq(expected)
   end
 end
