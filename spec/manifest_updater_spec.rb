@@ -14,7 +14,16 @@ describe Papers::ManifestUpdater do
 EOS
   }
 
-  let(:original_content) { <<EOS
+  before do
+    allow(File).to receive(:read).and_call_original
+    allow(File).to receive(:read).with(path).and_return(original_content)
+
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with(path).and_return(true)
+  end
+
+  describe "Ruby" do
+    let(:original_content) { <<EOS
 #{header.chomp}
 gems:
   rails-4.2.0:
@@ -26,71 +35,129 @@ gems:
     license_url: 
     project_url: https://github.com/newrelic/rpm
 EOS
-  }
+    }
 
-  let(:shoes_license) { <<EOS
+    let(:shoes_license) { <<EOS
   shoes-4.0.0:
     license: MIT
     license_url: 
     project_url: http://shoesrb.com
 EOS
-  }
+    }
 
-  before do
-    allow(File).to receive(:read).and_call_original
-    allow(File).to receive(:read).with(path).and_return(original_content)
 
-    allow(File).to receive(:exist?).and_call_original
-    allow(File).to receive(:exist?).with(path).and_return(true)
+    it "avoids unnecessary updates" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '4.2.0', license: "MIT"),
+        double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
+      ])
+
+      expect(updater.update).to eq(original_content)
+    end
+
+    it "updates version in place" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '4.2.7.1', license: "MIT"),
+        double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
+      ])
+
+      expected = original_content.gsub(/rails-4.2.0/, "rails-4.2.7.1")
+      expect(updater.update).to eq(expected)
+    end
+
+    it "adds new gems" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '4.2.0', license: "MIT"),
+        double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic"),
+        double(name: 'shoes', version: '4.0.0', license: "MIT", homepage: "http://shoesrb.com")
+      ])
+
+      expected = original_content + shoes_license
+      expect(updater.update).to eq(expected)
+    end
+
+    it "deletes removed gems" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'shoes', version: '4.0.0', license: "MIT", homepage: "http://shoesrb.com")
+      ])
+
+      expected = "#{header}gems:\n#{shoes_license}"
+      expect(updater.update).to eq(expected)
+    end
+
+    it "warns on change to license" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '5.0.0', license: "NOT-MIT", licenses: ["NOT-MIT"]),
+        double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic", licenses: ["New Relic"]),
+      ])
+
+      expected = original_content.gsub(/rails-4.2.0/, "rails-5.0.0").
+        sub(/MIT/, "License Change! Was 'MIT', is now [\"NOT-MIT\"]")
+      expect(updater.update).to eq(expected)
+    end
   end
 
-  it "avoids unnecessary updates" do
-    allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '4.2.0', license: "MIT"),
-      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
-    ])
+  describe "Javascript" do
+    let(:original_content) { <<EOS
+#{header.chomp}
+javascripts:
+  app/javascripts/instances/index.js:
+    license: New Relic
+    license_url: http://newrelic.com
+    project_url: http://newrelic.com
+  app/javascripts/instances/show.js:
+    license: Unknown
+    license_url: 
+    project_url: 
+bower_components:
+  angular:
+    license: MIT
+    license_url: 
+    project_url: 
+  lodash:
+    license: Unknown
+    license_url: 
+    project_url: 
+npm_packages:
+  react:
+    license: MIT
+    license_url: 
+    project_url: 
+  redux:
+    license: Unknown
+    license_url: 
+    project_url: 
+EOS
+    }
 
-    expect(updater.update).to eq(original_content)
-  end
+    it "updates javascripts" do
+      allow(Papers::Javascript).to receive(:introspected).and_return([
+        "app/javascripts/instances/index.js",
+        "app/javascripts/instances/delete.js"
+      ])
 
-  it "updates version in place" do
-    allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '4.2.7.1', license: "MIT"),
-      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic")
-    ])
+      expected = original_content.sub(%r{/instances/show.js}, "/instances/delete.js")
+      expect(updater.update).to eq(expected)
+    end
 
-    expected = original_content.gsub(/rails-4.2.0/, "rails-4.2.7.1")
-    expect(updater.update).to eq(expected)
-  end
+    it "updates bower_components" do
+      allow(Papers::BowerComponent).to receive(:full_introspected_entries).and_return([
+        { "name" => "angular" },
+        { "name" => "bower" }
+      ])
 
-  it "adds new gems" do
-    allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '4.2.0', license: "MIT"),
-      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic"),
-      double(name: 'shoes', version: '4.0.0', license: "MIT", homepage: "http://shoesrb.com")
-    ])
+      expected = original_content.sub(/lodash/, "bower")
+      expect(updater.update).to eq(expected)
+    end
 
-    expected = original_content + shoes_license
-    expect(updater.update).to eq(expected)
-  end
+    it "updates npm_packages" do
+      allow(Papers::NpmPackage).to receive(:full_introspected_entries).and_return([
+        { "name" => "react" },
+        { "name" => "flow" }
+      ])
 
-  it "deletes removed gems" do
-    allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'shoes', version: '4.0.0', license: "MIT", homepage: "http://shoesrb.com")
-    ])
-
-    expected = "#{header}gems:\n#{shoes_license}"
-    expect(updater.update).to eq(expected)
-  end
-
-  it "warns on change to license" do
-    allow(updater).to receive(:gemspecs).and_return([
-      double(name: 'rails', version: '5.0.0', license: "NOT-MIT", licenses: ["NOT-MIT"]),
-      double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic", licenses: ["New Relic"]),
-    ])
-
-    expected = original_content.gsub(/rails-4.2.0/, "rails-5.0.0").
-                                sub(/MIT/, "License Change! Was 'MIT', is now [\"NOT-MIT\"]")
-    expect(updater.update).to eq(expected)
+      expected = original_content.sub(/redux/, "flow")
+      expect(updater.update).to eq(expected)
+    end
   end
 end

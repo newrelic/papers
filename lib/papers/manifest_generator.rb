@@ -42,49 +42,6 @@ module Papers
       return manifest
     end
 
-    def get_installed_gems
-      gems = {}
-      Bundler.load.specs.each do |spec|
-        gems[gem_name_and_version(spec)] = gem_entry(spec)
-      end
-      return gems
-    end
-
-    def get_installed_javascripts
-      js = {}
-      Javascript.introspected.each do |entry|
-        js[entry] = {
-          'license'     => 'Unknown',
-          'license_url' => nil,
-          'project_url' => nil
-        }
-      end
-      js.empty? ? nil : js
-    end
-
-    def get_installed_bower_components
-      components = {}
-      BowerComponent.full_introspected_entries.each do |entry|
-        components[entry['name']] = {
-          'license' => 'Unknown',
-          'license_url' => nil,
-          'project_url' => ensure_valid_url(entry['homepage'])
-        }
-      end
-      components.empty? ? nil : components
-    end
-
-    def get_installed_npm_packages
-      packages = {}
-      NpmPackage.full_introspected_entries.each do |entry|
-        packages[entry['name']] = {
-          'license' => 'Unknown',
-          'license_url' => nil,
-          'project_url' => nil
-        }
-      end
-      packages.empty? ? nil : packages
-    end
   end
 
 end

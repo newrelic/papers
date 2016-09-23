@@ -27,12 +27,16 @@ module Papers
       result = YAML.load(original_content)
 
       update_gems(result)
+      update_javascript(result, "javascripts", get_installed_javascripts)
+      update_javascript(result, "bower_components", get_installed_bower_components)
+      update_javascript(result, "npm_packages", get_installed_npm_packages)
 
       build_header + YAML.dump(result)
     end
 
     def update_gems(result)
       result_gems = result["gems"]
+      return unless result_gems
 
       manifest_names = manifest_names(result_gems)
       gemspecs.each do |gemspec|
@@ -44,6 +48,23 @@ module Papers
       end
 
       delete_gems(result_gems, manifest_names)
+    end
+
+    def update_javascript(result, key, installed)
+      existing = result[key]
+      return unless existing && installed
+
+      removed = existing.keys - installed.keys
+
+      # Merge over new results from existing to keep edits
+      installed.merge!(existing)
+
+      # Remove things that aren't installed anymore
+      removed.each do |remove|
+        installed.delete(remove)
+      end
+
+      result[key] = installed
     end
 
     def update_gem(result_gems, gemspec, manifest_gem_key)
