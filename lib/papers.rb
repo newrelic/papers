@@ -1,6 +1,8 @@
 require 'papers/configuration'
 require 'papers/license_validator'
+require 'papers/manifest_command'
 require 'papers/manifest_generator'
+require 'papers/manifest_updater'
 require 'papers/cli'
 require 'papers/version'
 
