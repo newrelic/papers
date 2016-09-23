@@ -1,6 +1,4 @@
-require 'bundler/setup'
-require 'rspec'
-require_relative '../lib/papers'
+require 'spec_helper'
 
 describe 'Papers' do
 
