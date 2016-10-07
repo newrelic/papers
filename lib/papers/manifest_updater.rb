@@ -100,11 +100,10 @@ module Papers
     end
 
     def manifest_names(result_gems)
-      manifest_names = {}
-      result_gems.each do |(key, _)|
-        manifest_names[name_from_key(key)] = key
+      result_gems.reduce({}) do |hash, (key, _)|
+        hash[name_from_key(key)] = key
+        hash
       end
-      manifest_names
     end
 
     def gemspecs

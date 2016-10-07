@@ -7,16 +7,14 @@ module Papers
     def run
       if options[:generate]
         begin
-          generator = Papers::ManifestGenerator.new
-          generator.generate!
+          Papers::ManifestGenerator.new.generate!
         rescue Papers::FileExistsError => e
           warn "Error: 'papers_manifest.yml' already exists at '#{e.message}'. Aborting..."
         end
       end
 
       if options[:update]
-        updater = Papers::ManifestUpdater.new
-        updater.update!
+        Papers::ManifestUpdater.new.update!
       end
     end
 

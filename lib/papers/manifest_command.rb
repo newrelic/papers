@@ -1,11 +1,11 @@
 module Papers
   class ManifestCommand
     def initialize(manifest_path = nil)
-      @manifest_path = manifest_path || File.join('config','papers_manifest.yml')
+      @manifest_path = manifest_path || File.join('config', 'papers_manifest.yml')
     end
 
     def manifest_exists?
-      !!File.exist?(@manifest_path)
+      File.exist?(@manifest_path)
     end
 
     def build_header
@@ -82,7 +82,7 @@ module Papers
     end
 
     def blank?(str)
-      str.respond_to?(:empty?) ? str.empty? : !str
+      str.to_s.empty?
     end
 
     def ensure_valid_url(url_string)
