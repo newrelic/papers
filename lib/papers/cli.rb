@@ -5,17 +5,24 @@ module Papers
   class CLI
 
     def run
-      if parse_options[:generate]
+      if options[:generate]
         begin
-          generator = Papers::ManifestGenerator.new
-          generator.generate!
+          Papers::ManifestGenerator.new.generate!
         rescue Papers::FileExistsError => e
           warn "Error: 'papers_manifest.yml' already exists at '#{e.message}'. Aborting..."
         end
       end
+
+      if options[:update]
+        Papers::ManifestUpdater.new.update!
+      end
     end
 
     private
+
+    def options
+      @options ||= parse_options
+    end
 
     def parse_options
       options = {}
@@ -24,6 +31,10 @@ module Papers
 
         opts.on("-g", "--generate", "Generate papers_manifest.yml") do |v|
           options[:generate] = v
+        end
+
+        opts.on("-u", "--update", "Update papers_manifest.yml for Rubygems") do |v|
+          options[:update] = v
         end
 
         opts.on_tail( '-h', '--help', 'Display this screen' ) do |v|
