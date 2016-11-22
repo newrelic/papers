@@ -69,7 +69,7 @@ module Papers
 
     def update_gem(result_gems, gemspec, manifest_gem_key)
       manifest_gem = result_gems.delete(manifest_gem_key)
-      if gemspec.license != manifest_gem["license"]
+      if gemspec.license && gemspec.license != manifest_gem["license"]
         new_licenses = gemspec.licenses || []
         new_licenses << gemspec.license
         new_licenses.uniq!
