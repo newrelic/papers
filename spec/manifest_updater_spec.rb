@@ -95,6 +95,16 @@ EOS
         sub(/MIT/, "License Change! Was 'MIT', is now [\"NOT-MIT\"]")
       expect(updater.update).to eq(expected)
     end
+
+    it "doesn't touch licenses when missing license in gemspec" do
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '5.0.0', license: nil, licenses: []),
+        double(name: 'newrelic_rpm', version: '3.16.2.321', license: "New Relic", licenses: ["New Relic"]),
+      ])
+
+      expected = original_content.gsub(/rails-4.2.0/, "rails-5.0.0")
+      expect(updater.update).to eq(expected)
+    end
   end
 
   describe "Javascript" do

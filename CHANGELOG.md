@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.4.1
+* Fix problem where missing licenses from gemspecs overrode hand-authored manifest values.
+
+## 2.4.0
+* Support `papers --update` to bring manifest up to date with current libraries installed.
+
 ## 2.3.0
 * Add `config.ignore_npm_dev_dependencies` option to not apply validation to npm devDepdency modules. This is useful if you don't need to consider packages that aren't use in production.
 
