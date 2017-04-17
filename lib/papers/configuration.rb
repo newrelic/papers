@@ -2,6 +2,7 @@ module Papers
   class Configuration
     attr_accessor :license_whitelist
     attr_accessor :version_whitelisted_license
+    attr_accessor :package_whitelist
 
     attr_accessor :manifest_file
 
@@ -29,6 +30,8 @@ module Papers
         'Unlicensed',
         'ISC'
       ]
+
+      @package_whitelist = []
 
       @version_whitelisted_license = nil
 

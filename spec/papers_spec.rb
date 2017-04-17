@@ -121,6 +121,27 @@ describe 'Papers' do
     ])
   end
 
+  it 'is OK with whitelisting specific gems', focus: true do
+    allow_any_instance_of(Papers::Configuration).to receive(:package_whitelist).and_return(['foo-1.2'])
+    allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
+      'javascripts' => {},
+      'gems' => {
+        'foo-1.2' => { 'license' => 'GPL' },
+        'baz-1.3' => { 'license' => 'GPL' }
+      }
+    })
+    allow(Bundler).to receive_message_chain(:load, :specs).and_return([
+      double(name: 'foo', version: '1.2', licenses: ['GPL']),
+      double(name: 'baz', version: '1.3', licenses: ['GPL'])
+    ])
+
+    expect(validator).not_to be_valid
+
+    expect(validator.errors).to eq([
+      'Gem baz-1.3 is licensed under GPL, which is not whitelisted'
+    ])
+  end
+
   it 'is OK with matching gem sets but complain about a license issue' do
     allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
