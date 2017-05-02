@@ -68,6 +68,10 @@ Papers.configure do |config|
   # ]
   # config.license_whitelist << 'New Relic'
 
+  # You can specify packages which should be whitelisted regardless of license, in case you know your usage
+  # is OK even though you prefer not to use its license in other cases.
+  # config.package_whitelist << 'thin-1.7.0'
+
   # You can specify a single license that, when used, ignores the version. Defaults to nil.
   # WARNING: You should only use this for software licensed in house.
   # config.version_whitelisted_license = 'New Relic'
