@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.2
+* Support for `package_whitelist` in configuration.
+
 ## 2.4.1
 * Fix problem where missing licenses from gemspecs overrode hand-authored manifest values.
 
