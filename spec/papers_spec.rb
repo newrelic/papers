@@ -121,7 +121,7 @@ describe 'Papers' do
     ])
   end
 
-  it 'is OK with whitelisting specific gems', focus: true do
+  it 'is OK with whitelisting specific gems' do
     allow_any_instance_of(Papers::Configuration).to receive(:package_whitelist).and_return(['foo-1.2'])
     allow_any_instance_of(Papers::LicenseValidator).to receive(:manifest).and_return({
       'javascripts' => {},
