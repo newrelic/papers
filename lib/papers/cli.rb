@@ -15,7 +15,7 @@ module Papers
       when :help
         emit_help ""
       else
-        emit_help "Unrecognized command. Must run either"
+        emit_help "Unrecognized command."
       end
     rescue Papers::FileExistsError => e
       warn "Error: 'papers_manifest.yml' already exists at '#{e.message}'. Aborting..."
