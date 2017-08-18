@@ -165,11 +165,13 @@ Finished in 0.01043 seconds
 ```
 
 ### Generating the manifest from inside your tests
-If you update your gems on a frequent basis, failing to remember to update the Papers manifest can be a time-consuming effort in getting your tests to pass.  If you'd like, you can add this to your test to generate the manifest automatically:
+If you update your gems on a frequent basis, failing to remember to update the Papers manifest can be a time-consuming effort in getting your tests to pass.  You can add this to your test to generate the manifest automatically:
 
 ```ruby
 Papers::ManifestUpdater.new.update!
 ```
+
+Note that you should not do this if you manually edit your manifest!
 
 
 ## License
