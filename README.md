@@ -164,6 +164,16 @@ Finished in 0.01043 seconds
 1 examples, 1 failures
 ```
 
+### Generating the manifest from inside your tests
+If you update your gems on a frequent basis, failing to remember to update the Papers manifest can be a time-consuming effort in getting your tests to pass.  You can add this to your test to generate the manifest automatically:
+
+```ruby
+Papers::ManifestUpdater.new.update!
+```
+
+Note that you should not do this if you manually edit your manifest!
+
+
 ## License
 
 The Papers Gem is licensed under the __MIT License__.  See [MIT-LICENSE](https://github.com/newrelic/papers/blob/master/MIT-LICENSE) for full text.
