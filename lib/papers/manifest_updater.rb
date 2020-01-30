@@ -31,7 +31,10 @@ module Papers
       update_javascript(result, "bower_components", get_installed_bower_components)
       update_javascript(result, "npm_packages", get_installed_npm_packages)
 
-      build_header + YAML.dump(result)
+      manifest_content = build_header + YAML.dump(result)
+
+      # strip trailing whitespace, ensure file ends with a newline
+      manifest_content.gsub(/\s*$/, '') + "\n"
     end
 
     def update_gems(result)
