@@ -51,8 +51,8 @@ module Papers
 
     def get_installed_npm_packages
       packages = {}
-      NpmPackage.full_introspected_entries.each do |entry|
-        packages[entry['name']] = {
+      NpmPackage.introspected.each do |entry|
+        packages[entry] = {
           'license' => 'Unknown',
           'license_url' => nil,
           'project_url' => nil
