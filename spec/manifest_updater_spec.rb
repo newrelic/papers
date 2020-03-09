@@ -28,11 +28,11 @@ EOS
 gems:
   rails-4.2.0:
     license: MIT
-    license_url: 
+    license_url:
     project_url: https://github.com/rails/rails
   newrelic_rpm:
     license: New Relic
-    license_url: 
+    license_url:
     project_url: https://github.com/newrelic/rpm
 EOS
     }
@@ -40,7 +40,7 @@ EOS
     let(:shoes_license) { <<EOS
   shoes-4.0.0:
     license: MIT
-    license_url: 
+    license_url:
     project_url: http://shoesrb.com
 EOS
     }
@@ -117,26 +117,26 @@ javascripts:
     project_url: http://newrelic.com
   app/javascripts/instances/show.js:
     license: Unknown
-    license_url: 
-    project_url: 
+    license_url:
+    project_url:
 bower_components:
   angular:
     license: MIT
-    license_url: 
-    project_url: 
+    license_url:
+    project_url:
   lodash:
     license: Unknown
-    license_url: 
-    project_url: 
+    license_url:
+    project_url:
 npm_packages:
   react:
     license: MIT
-    license_url: 
-    project_url: 
+    license_url:
+    project_url:
   redux:
     license: Unknown
-    license_url: 
-    project_url: 
+    license_url:
+    project_url:
 EOS
     }
 
