@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.3
+* Better whitespace output to avoid trailing spaces.
+
 ## 2.4.2
 * Support for `package_whitelist` in configuration.
 * Fix help output from command-line tool
