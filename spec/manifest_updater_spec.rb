@@ -170,4 +170,31 @@ EOS
       expect(updater.update).to eq(expected)
     end
   end
+
+  describe "with a configured manifest file path" do
+    let(:path) { "/config/papers_manifest_custom.yml" }
+    subject(:updater) { Papers::ManifestUpdater.new }
+    let(:original_content) { <<EOS
+#{header.chomp}
+gems:
+  rails-4.2.0:
+    license: MIT
+    license_url:
+    project_url: https://github.com/rails/rails
+EOS
+          }
+
+    it "updates the file at the configured path" do
+      Papers.configure do |config|
+        config.manifest_file = path
+      end
+
+      allow(updater).to receive(:gemspecs).and_return([
+        double(name: 'rails', version: '4.2.7.1', license: "MIT"),
+      ])
+
+      expected = original_content.gsub(/rails-4.2.0/, "rails-4.2.7.1")
+      expect(updater.update).to eq(expected)
+    end
+  end
 end

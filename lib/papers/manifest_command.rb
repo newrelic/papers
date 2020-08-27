@@ -1,7 +1,7 @@
 module Papers
   class ManifestCommand
     def initialize(manifest_path = nil)
-      @manifest_path = manifest_path || File.join('config', 'papers_manifest.yml')
+      @manifest_path = manifest_path || Papers.config.manifest_file || File.join('config', 'papers_manifest.yml')
     end
 
     def manifest_exists?
