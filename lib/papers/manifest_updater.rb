@@ -27,9 +27,9 @@ module Papers
       result = YAML.load(original_content)
 
       update_gems(result)
-      update_javascript(result, "javascripts", get_installed_javascripts)
-      update_javascript(result, "bower_components", get_installed_bower_components)
-      update_javascript(result, "npm_packages", get_installed_npm_packages)
+      update_javascript(result, 'javascripts', get_installed_javascripts)
+      update_javascript(result, 'bower_components', get_installed_bower_components)
+      update_javascript(result, 'npm_packages', get_installed_npm_packages)
 
       manifest_content = build_header + YAML.dump(result)
 
@@ -38,7 +38,7 @@ module Papers
     end
 
     def update_gems(result)
-      result_gems = result["gems"]
+      result_gems = result['gems']
       return unless result_gems
 
       manifest_names = manifest_names(result_gems)
@@ -72,12 +72,14 @@ module Papers
 
     def update_gem(result_gems, gemspec, manifest_gem_key)
       manifest_gem = result_gems.delete(manifest_gem_key)
-      if gemspec.license && gemspec.license != manifest_gem["license"]
+      if gemspec.license && gemspec.license != manifest_gem['license']
         new_licenses = gemspec.licenses || []
         new_licenses << gemspec.license
         new_licenses.uniq!
 
-        manifest_gem["license"] = "License Change! Was '#{manifest_gem["license"]}', is now #{new_licenses}"
+        unless manifest_gem['license'].match(/^License Change! Was '.+', is now .+$/)
+          manifest_gem['license'] = "License Change! Was '#{manifest_gem['license']}', is now #{new_licenses}"
+        end
       end
 
       name = gem_name_and_version(gemspec)
@@ -99,7 +101,7 @@ module Papers
     end
 
     def name_from_key(key)
-      key.include?("-") ? key.rpartition("-").first : key
+      key.include?('-') ? key.rpartition('-').first : key
     end
 
     def manifest_names(result_gems)

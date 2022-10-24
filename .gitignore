@@ -4,3 +4,5 @@ Guardfile
 *.swp
 Gemfile.lock
 *.gem
+# Ignore coverage files
+coverage
