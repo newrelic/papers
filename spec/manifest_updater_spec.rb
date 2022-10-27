@@ -55,34 +55,44 @@ EOS
 
     it 'should avoid nesting license change messages' do
       gemspec = double(name: 'foo', version: '1.2.3', license: "some License Change! Was 'New Relic', is now [\"Nonstandard\"]", licenses: [], homepage: 'foo.com')
-      manifest_gem = {
+
+      result_gems = {}
+      manifest_gem_key = 'foo'
+      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return({
         'name' => 'foo',
         'version' => '1.2.3',
         'license' => "License Change! Was 'New Relic', is now [\"Nonstandard\"]",
         'homepage' => 'foo.com'
-      }
+      })
 
-      result_gems = {}
-      manifest_gem_key = 'foo'
-      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return(manifest_gem)
       updater.update_gem(result_gems, gemspec, manifest_gem_key)
-      expect(result_gems['foo']).to eq(manifest_gem)
+      expect(result_gems['foo']).to eq({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was 'New Relic', is now [\"Nonstandard\"]",
+        'homepage' => 'foo.com'
+      })
     end
 
     it 'should work as normal for non nested changes' do
       gemspec = double(name: 'foo', version: '1.2.3', license: "asdf", licenses: [], homepage: 'foo.com')
-      manifest_gem = {
+
+      result_gems = {}
+      manifest_gem_key = 'foo'
+      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return({
         'name' => 'foo',
         'version' => '1.2.3',
         'license' => "ldkadfaldfjalkdsfj",
         'homepage' => 'foo.com'
-      }
+      })
 
-      result_gems = {}
-      manifest_gem_key = 'foo'
-      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return(manifest_gem)
       updater.update_gem(result_gems, gemspec, manifest_gem_key)
-      expect(result_gems['foo']).to eq(manifest_gem)
+      expect(result_gems['foo']).to eq({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was 'ldkadfaldfjalkdsfj', is now [\"asdf\"]",
+        'homepage' => 'foo.com'
+      })
     end
 
     it "avoids unnecessary updates" do
