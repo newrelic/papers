@@ -77,7 +77,8 @@ module Papers
         new_licenses << gemspec.license
         new_licenses.uniq!
 
-        unless manifest_gem['license'].match(/^License Change! Was '.+', is now .+$/)
+        # license key could be an array to_s to protect against that
+        unless manifest_gem['license'].to_s.match(/^License Change! Was '.+', is now .+$/)
           manifest_gem['license'] = "License Change! Was '#{manifest_gem['license']}', is now #{new_licenses}"
         end
       end
