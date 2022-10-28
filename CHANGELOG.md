@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.4
+* Fix to not re-apply already present license change warnings.
+
 ## 2.4.3
 * Better whitespace output to avoid trailing spaces.
 
