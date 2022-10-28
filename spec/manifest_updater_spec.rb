@@ -45,6 +45,77 @@ EOS
 EOS
     }
 
+    let(:foo_license) { <<EOS
+      signed_payload-2.0.1:
+        license: License Change! Was 'New Relic', is now ["Nonstandard"]
+      license_url:
+        project_url: https://source.datanerd.us/account-auth-and-access/signed_payload
+EOS
+    }
+
+    it 'should avoid nesting license change messages' do
+      gemspec = double(name: 'foo', version: '1.2.3', license: "some License Change! Was 'New Relic', is now [\"Nonstandard\"]", licenses: [], homepage: 'foo.com')
+
+      result_gems = {}
+      manifest_gem_key = 'foo'
+      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was 'New Relic', is now [\"Nonstandard\"]",
+        'homepage' => 'foo.com'
+      })
+
+      updater.update_gem(result_gems, gemspec, manifest_gem_key)
+      expect(result_gems['foo']).to eq({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was 'New Relic', is now [\"Nonstandard\"]",
+        'homepage' => 'foo.com'
+      })
+    end
+
+    it 'should work as normal for non nested changes' do
+      gemspec = double(name: 'foo', version: '1.2.3', license: "asdf", licenses: [], homepage: 'foo.com')
+
+      result_gems = {}
+      manifest_gem_key = 'foo'
+      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "ldkadfaldfjalkdsfj",
+        'homepage' => 'foo.com'
+      })
+
+      updater.update_gem(result_gems, gemspec, manifest_gem_key)
+      expect(result_gems['foo']).to eq({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was 'ldkadfaldfjalkdsfj', is now [\"asdf\"]",
+        'homepage' => 'foo.com'
+      })
+    end
+
+    # We don't want to support it fully, but don't bomb out if we find an array
+    it 'should handle array in manifest' do
+      gemspec = double(name: 'foo', version: '1.2.3', license: "asdf", licenses: ["asdf", "new"], homepage: 'foo.com')
+
+      result_gems = {}
+      manifest_gem_key = 'foo'
+      allow(result_gems).to receive(:delete).with(manifest_gem_key).and_return({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => ["asdf", "old"],
+        'homepage' => 'foo.com'
+      })
+
+      updater.update_gem(result_gems, gemspec, manifest_gem_key)
+      expect(result_gems['foo']).to eq({
+        'name' => 'foo',
+        'version' => '1.2.3',
+        'license' => "License Change! Was '[\"asdf\", \"old\"]', is now [\"asdf\", \"new\"]",
+        'homepage' => 'foo.com'
+      })
+    end
 
     it "avoids unnecessary updates" do
       allow(updater).to receive(:gemspecs).and_return([
